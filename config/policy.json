@@ -1,0 +1,47 @@
+{
+  "version": "2026-06-14.1",
+  "fail_mode": "open",
+  "_doc": "Aturan enforcement PreToolUse. action: deny (blokir) | flag (izinkan + tandai). Rule pertama yang cocok menang; taruh deny dulu. field: command|path|any. match: contains[] (substring) atau regex (string, case-insensitive). tool: pipe-separated; 'mcp' cocok utk semua tool mcp__*, '*' utk semua.",
+  "rules": [
+    {
+      "id": "bash-rm-recursive-force",
+      "tool": "Bash",
+      "field": "command",
+      "regex": "\\brm\\b.*(-[a-zA-Z]*r[a-zA-Z]*f|-[a-zA-Z]*f[a-zA-Z]*r|--recursive)",
+      "action": "deny",
+      "reason": "Perintah 'rm' rekursif/paksa diblokir kebijakan korporat."
+    },
+    {
+      "id": "bash-fork-bomb",
+      "tool": "Bash",
+      "field": "command",
+      "regex": ":\\s*\\(\\s*\\)\\s*\\{",
+      "action": "deny",
+      "reason": "Pola fork bomb diblokir."
+    },
+    {
+      "id": "bash-disk-power",
+      "tool": "Bash",
+      "field": "command",
+      "regex": "\\b(mkfs\\S*|dd\\s+if=|shutdown|reboot)\\b|format\\s+[a-zA-Z]:",
+      "action": "deny",
+      "reason": "Operasi disk/power berbahaya diblokir."
+    },
+    {
+      "id": "antitamper-claude-settings",
+      "tool": "Edit|Write|MultiEdit",
+      "field": "path",
+      "contains": ["managed-settings.json", ".claude/settings.json", ".claude\\settings.json"],
+      "action": "deny",
+      "reason": "Mengubah settings/kebijakan Claude Code diblokir (anti-tamper trapping)."
+    },
+    {
+      "id": "secrets-access",
+      "tool": "Read|Bash",
+      "field": "any",
+      "regex": "(\\.credentials\\.json|id_rsa|(^|[/\\\\])\\.env\\b|\\.pem\\b|secrets?\\.ya?ml)",
+      "action": "flag",
+      "reason": "Akses kredensial/secret ditandai untuk audit."
+    }
+  ]
+}

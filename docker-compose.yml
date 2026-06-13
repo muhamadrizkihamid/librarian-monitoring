@@ -1,0 +1,30 @@
+# Activity Trapping Service — collector lokal (MVP)
+# Jalankan: docker compose up -d
+# Claude Code (di host) mengirim OTLP ke localhost:4317/4318 -> container ini.
+
+services:
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: trapping-otel-collector
+    restart: unless-stopped
+    command: ["--config=/etc/otelcol-contrib/config.yaml"]
+    depends_on:
+      - siem-mock
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
+      - ./data:/data
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+
+  # Mock SIEM (Splunk HEC) untuk uji jalur exporter. Ganti dgn Splunk korporat saat siap.
+  siem-mock:
+    image: node:20-alpine
+    container_name: trapping-siem-mock
+    restart: unless-stopped
+    command: ["node", "/app/server.mjs"]
+    volumes:
+      - ./siem-mock/server.mjs:/app/server.mjs:ro
+      - ./data:/data
+    ports:
+      - "8088:8088"   # Splunk HEC

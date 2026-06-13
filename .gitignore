@@ -1,0 +1,16 @@
+# Output audit & telemetri lokal — JANGAN commit (berisi konten prompt/command, PII)
+data/
+
+# Backup settings yang dibuat installer
+*.bak-*
+
+# Node / OS
+node_modules/
+*.log
+.DS_Store
+Thumbs.db
+
+# Secrets lokal (jangan pernah commit token SIEM dll.)
+.env
+*.local
+secrets.*

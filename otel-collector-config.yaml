@@ -1,0 +1,55 @@
+# OTel Collector — Activity Trapping Service (L2 telemetry sink, MVP lokal)
+# Menerima metrics + logs dari Claude Code CLI, menulis ke file audit lokal,
+# dan menampilkan ringkasan di console (debug). Di produksi, ganti/ tambah
+# exporter ke SIEM (splunk_hec), BI (prometheusremotewrite), dan WORM store.
+
+receivers:
+  otlp:
+    protocols:
+      http:
+        endpoint: 0.0.0.0:4318
+      grpc:
+        endpoint: 0.0.0.0:4317
+
+processors:
+  batch: {}
+  # Contoh redaksi (NONAKTIF di mode FULL). Untuk produksi/UU PDP, aktifkan
+  # untuk membuang konten prompt sebelum diteruskan ke sink.
+  # attributes/redact:
+  #   actions:
+  #     - key: prompt
+  #       action: delete
+
+exporters:
+  # Audit store (simulasi WORM lokal): satu file JSONL per signal.
+  file/metrics:
+    path: /data/otel/metrics.jsonl
+  file/logs:
+    path: /data/otel/logs.jsonl
+  debug:
+    verbosity: basic
+  # SIEM (Splunk HEC). Untuk produksi: ganti endpoint+token ke Splunk korporat,
+  # gunakan https + tls verify, dan simpan token via env (mis. ${env:SPLUNK_HEC_TOKEN}).
+  splunk_hec/siem:
+    token: "test-hec-token-0000"
+    endpoint: "http://siem-mock:8088/services/collector"
+    source: "claude-code"
+    sourcetype: "otel:claude_code"
+    index: "main"
+    disable_compression: true
+    tls:
+      insecure_skip_verify: true
+
+service:
+  telemetry:
+    logs:
+      level: warn
+  pipelines:
+    metrics:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file/metrics, debug, splunk_hec/siem]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [file/logs, debug, splunk_hec/siem]

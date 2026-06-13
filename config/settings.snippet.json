@@ -1,0 +1,29 @@
+{
+  "_comment": "ILUSTRATIF — inilah yang ditambahkan merge-settings.mjs ke ~/.claude/settings.json (scope user). Path command trap.mjs di-resolve otomatis oleh script. JANGAN copy-paste mentah; pakai: node scripts/merge-settings.mjs",
+  "env": {
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_METRICS_EXPORTER": "otlp",
+    "OTEL_LOGS_EXPORTER": "otlp",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "http/protobuf",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:4318",
+    "OTEL_LOG_USER_PROMPTS": "1",
+    "OTEL_LOG_TOOL_DETAILS": "1",
+    "OTEL_METRIC_EXPORT_INTERVAL": "10000",
+    "OTEL_LOGS_EXPORT_INTERVAL": "2000"
+  },
+  "hooks": {
+    "UserPromptSubmit": [{ "hooks": [{ "type": "command", "command": "node \"<abs>/hooks/trap.mjs\"" }] }],
+    "PreToolUse":       [{ "hooks": [{ "type": "command", "command": "node \"<abs>/hooks/trap.mjs\"" }] }],
+    "PostToolUse":      [{ "hooks": [{ "type": "command", "command": "node \"<abs>/hooks/trap.mjs\"" }] }],
+    "PostToolUseFailure":[{ "hooks": [{ "type": "command", "command": "node \"<abs>/hooks/trap.mjs\"" }] }],
+    "Stop":             [{ "hooks": [{ "type": "command", "command": "node \"<abs>/hooks/trap.mjs\"" }] }],
+    "SessionStart":     [{ "hooks": [{ "type": "command", "command": "node \"<abs>/hooks/trap.mjs\"" }] }],
+    "SessionEnd":       [{ "hooks": [{ "type": "command", "command": "node \"<abs>/hooks/trap.mjs\"" }] }]
+  },
+  "_proxy_stub_L3": {
+    "_note": "JANGAN aktifkan sebelum proxy korporat ada — akan memutus CLI. Saat siap, tambahkan ke env:",
+    "ANTHROPIC_BASE_URL": "https://proxy.internal/anthropic",
+    "HTTPS_PROXY": "http://proxy.internal:8080",
+    "NODE_EXTRA_CA_CERTS": "C:/path/to/corp-ca.pem"
+  }
+}

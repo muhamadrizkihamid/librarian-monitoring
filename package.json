@@ -1,0 +1,18 @@
+{
+  "name": "claude-code-trapping-mvp",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Activity Trapping Service (capture + enforcement) untuk Claude Code CLI — Bank Mega",
+  "scripts": {
+    "up": "docker compose up -d",
+    "down": "docker compose down",
+    "install:hooks": "node scripts/merge-settings.mjs",
+    "install:hooks:dry": "node scripts/merge-settings.mjs --dry-run",
+    "uninstall:hooks": "node scripts/merge-settings.mjs --uninstall",
+    "reconcile": "node scripts/reconcile.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}
