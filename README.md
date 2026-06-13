@@ -66,18 +66,21 @@ node scripts/merge-settings.mjs --uninstall   # hapus env + hooks kita (backup t
 docker compose down
 ```
 
-## Dashboard monitoring (Docker, live)
+## Dashboard monitoring (Docker, live, WebSocket)
 
 Berjalan sebagai **container** (`trapping-dashboard`) — ikut naik dengan `docker compose up -d`. Buka **http://localhost:8090**.
 
-- **Live push (SSE)** — bukan refresh periodik. Server mendeteksi perubahan `data/` (~0.7 dtk) lalu mendorong update ke browser real-time. Indikator **● LIVE** di header.
-- Menampilkan: kartu ringkasan (event hooks, allow/flag/block, event SIEM, API request, est. biaya), **grafik tren event & biaya per waktu** (SVG inline), **aktivitas terbaru**, **enforcement (block/flag)**, **SIEM event by name**.
+- **Live via WebSocket** (`/ws`, raw RFC6455, tanpa dependensi) — server mendeteksi event baru (~0.7 dtk) lalu **push per-event granular** ke browser (live ticker). Indikator **● LIVE (WebSocket)**. Fallback otomatis: polling `/api/data` bila WS tak tersedia.
+- **Filter**: per-**user**, per-**tool**, dan **rentang waktu** (15m / 1j / 24j / semua) — semua tampilan (kartu, grafik, tabel) mengikuti filter.
+- Menampilkan: kartu ringkasan (event, allow/flag/block, event SIEM, biaya rentang), **grafik tren event & biaya per waktu** (SVG inline), **live ticker**, **aktivitas terbaru**, **enforcement (block/flag)**, **SIEM event by name**.
 - Container mount `data/` **read-only**; tanpa dependensi npm.
 
 ```bash
 docker compose up -d dashboard      # atau seluruh stack: docker compose up -d
 # dev lokal (opsional, tanpa docker): node dashboard/server.mjs  [PORT=9000]
 ```
+
+> Catatan identitas: filter **user** memakai `user_id` hook (username mesin); biaya/SIEM memakai `user.email` (OTel). Korelasi username↔email adalah gap yang ditutup di produksi via IdP (lihat LLD §B.5).
 
 ## Enforcement / Block (PreToolUse)
 
