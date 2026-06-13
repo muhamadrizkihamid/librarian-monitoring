@@ -15,6 +15,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
+import http from 'node:http';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { evaluate, policyVersion } from './policy.mjs';
@@ -61,6 +62,34 @@ function mcpInvocation(toolName, toolInput) {
     };
   }
   return null;
+}
+
+// Kirim event hook sebagai OTLP log ke collector (unifikasi: semua data -> 1 OTel)
+function emitOtlp(cef, done) {
+  try {
+    const base = (process.env.TRAP_OTLP_ENDPOINT || process.env.OTEL_EXPORTER_OTLP_ENDPOINT || 'http://localhost:4318').replace(/\/$/, '');
+    const url = new URL(base + '/v1/logs');
+    const attr = (k, v) => ({ key: k, value: { stringValue: String(v) } });
+    const attrs = [
+      attr('event.name', 'claude_code.hook.' + cef.hook_event_name),
+      attr('capture_layer', cef.capture_layer), attr('platform', cef.platform), attr('surface', cef.surface),
+      attr('user.id', cef.user_id), attr('session.id', cef.session_id || ''), attr('event_kind', cef.event_kind),
+      attr('decision', cef.decision), attr('policy_version', cef.policy_version || ''),
+    ];
+    if (cef.tool_name) attrs.push(attr('tool_name', cef.tool_name));
+    if (cef.decision_reason) attrs.push(attr('decision_reason', cef.decision_reason));
+    if (cef.policy_rule_id) attrs.push(attr('policy_rule_id', cef.policy_rule_id));
+    if (cef.tool_input && typeof cef.tool_input.command === 'string') attrs.push(attr('command', cef.tool_input.command));
+    if (cef.tool_input != null) attrs.push(attr('tool_input', JSON.stringify(cef.tool_input)));
+    if (cef.mcp_invocation) attrs.push(attr('mcp_server', cef.mcp_invocation.mcp_server || ''));
+    const payload = JSON.stringify({ resourceLogs: [{ resource: { attributes: [attr('service.name', 'claude-code-hook')] },
+      scopeLogs: [{ logRecords: [{ timeUnixNano: `${Date.now()}000000`, body: { stringValue: 'claude_code.hook.' + cef.event_kind }, attributes: attrs }] }] }] });
+    const req = http.request({ hostname: url.hostname, port: url.port || 80, path: url.pathname, method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) }, timeout: 600 },
+      (res) => { res.on('data', () => {}); res.on('end', done); });
+    req.on('error', done); req.on('timeout', () => { req.destroy(); done(); });
+    req.write(payload); req.end();
+  } catch { done(); }
 }
 
 function main() {
@@ -122,7 +151,11 @@ function main() {
     }));
   }
 
-  process.exit(0); // exit 0; deny disampaikan via JSON di atas
+  // Kirim ke OTel (unifikasi 1 sumber), lalu keluar. Selalu exit 0 walau gagal.
+  let exited = false;
+  const finish = () => { if (!exited) { exited = true; process.exit(0); } };
+  setTimeout(finish, 800); // jaga-jaga: jangan menggantung CLI
+  emitOtlp(cef, finish);
 }
 
 main();

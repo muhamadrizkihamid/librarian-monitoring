@@ -13,12 +13,28 @@ receivers:
 
 processors:
   batch: {}
-  # Contoh redaksi (NONAKTIF di mode FULL). Untuk produksi/UU PDP, aktifkan
-  # untuk membuang konten prompt sebelum diteruskan ke sink.
-  # attributes/redact:
-  #   actions:
-  #     - key: prompt
-  #       action: delete
+  # Redaksi PII (UU PDP) — hanya pada field KONTEN (prompt/response/command/tool_input).
+  # Sengaja TIDAK menyentuh user.email (join key identitas) maupun id/timestamp.
+  transform/pii:
+    error_mode: ignore
+    log_statements:
+      - context: log
+        statements:
+          - replace_pattern(attributes["prompt"], "(\\+62|0)8[0-9]{7,12}", "[REDACTED-PHONE]") where attributes["prompt"] != nil
+          - replace_pattern(attributes["prompt"], "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[REDACTED-EMAIL]") where attributes["prompt"] != nil
+          - replace_pattern(attributes["prompt"], "\\b[0-9]{13,19}\\b", "[REDACTED-NUM]") where attributes["prompt"] != nil
+          - replace_pattern(attributes["body"], "(\\+62|0)8[0-9]{7,12}", "[REDACTED-PHONE]") where attributes["body"] != nil
+          - replace_pattern(attributes["body"], "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[REDACTED-EMAIL]") where attributes["body"] != nil
+          - replace_pattern(attributes["body"], "\\b[0-9]{13,19}\\b", "[REDACTED-NUM]") where attributes["body"] != nil
+          - replace_pattern(attributes["command"], "(\\+62|0)8[0-9]{7,12}", "[REDACTED-PHONE]") where attributes["command"] != nil
+          - replace_pattern(attributes["command"], "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[REDACTED-EMAIL]") where attributes["command"] != nil
+          - replace_pattern(attributes["command"], "\\b[0-9]{13,19}\\b", "[REDACTED-NUM]") where attributes["command"] != nil
+          - replace_pattern(attributes["full_command"], "\\b[0-9]{13,19}\\b", "[REDACTED-NUM]") where attributes["full_command"] != nil
+          - replace_pattern(attributes["full_command"], "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[REDACTED-EMAIL]") where attributes["full_command"] != nil
+          - replace_pattern(attributes["tool_input"], "(\\+62|0)8[0-9]{7,12}", "[REDACTED-PHONE]") where attributes["tool_input"] != nil
+          - replace_pattern(attributes["tool_input"], "\\b[0-9]{13,19}\\b", "[REDACTED-NUM]") where attributes["tool_input"] != nil
+          - replace_pattern(attributes["tool_input"], "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[REDACTED-EMAIL]") where attributes["tool_input"] != nil
+          - replace_pattern(attributes["full_command"], "(\\+62|0)8[0-9]{7,12}", "[REDACTED-PHONE]") where attributes["full_command"] != nil
 
 exporters:
   # Audit store (simulasi WORM lokal): satu file JSONL per signal.
@@ -39,6 +55,13 @@ exporters:
     disable_compression: true
     tls:
       insecure_skip_verify: true
+  # SigNoz (tujuan utama "1 OTel"). AKTIFKAN: hapus komentar + set env SIGNOZ_OTLP_ENDPOINT
+  # (mis. host.docker.internal:4317 ke collector SigNoz), lalu tambahkan 'otlp/signoz' ke
+  # exporters kedua pipeline di bawah. Lihat README bagian "Kirim ke SigNoz".
+  # otlp/signoz:
+  #   endpoint: "${env:SIGNOZ_OTLP_ENDPOINT}"
+  #   tls:
+  #     insecure: true
 
 service:
   telemetry:
@@ -51,5 +74,5 @@ service:
       exporters: [file/metrics, debug, splunk_hec/siem]
     logs:
       receivers: [otlp]
-      processors: [batch]
-      exporters: [file/logs, debug, splunk_hec/siem]
+      processors: [transform/pii, batch]   # redaksi PII sebelum ekspor
+      exporters: [file/logs, debug, splunk_hec/siem]   # + otlp/signoz saat SigNoz aktif

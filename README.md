@@ -8,7 +8,7 @@ Implementasi nyata dari `LLD-Activity-Trapping-Service.md`, di-scope untuk **men
 
 | Lapisan | Status | Komponen |
 |---|---|---|
-| **L2 hooks (capture)** | ✅ aktif | `hooks/trap.mjs` → audit JSONL (CEF v1) |
+| **L2 hooks (capture)** | ✅ aktif | `hooks/trap.mjs` → **OTLP ke collector** (+ audit JSONL lokal) |
 | **L2 enforcement (block)** | ✅ aktif | `PreToolUse` + `config/policy.json` → deny/flag/allow |
 | **L2 OTel** | ✅ aktif | Claude Code telemetry → `otel-collector` lokal → file + **SIEM (Splunk HEC)** |
 | **SIEM** | ✅ mock | `siem-mock/` (Splunk HEC tiruan) → `data/siem/hec-received.jsonl`. Ganti ke Splunk korporat saat siap. |
@@ -126,6 +126,20 @@ Verifikasi mock SIEM sekarang:
 ```bash
 cat data/siem/hec-received.jsonl    # event format Splunk HEC (event, fields, source, sourcetype, index, time)
 ```
+
+## Redaksi PII (UU PDP)
+
+Collector menjalankan processor `transform/pii` pada pipeline **logs**: mask **NIK / no. kartu (13–19 digit), email, no. telepon ID** di field **konten** (`prompt`, `body`/response, `command`, `full_command`, `tool_input`) **sebelum** diekspor ke sink. `user.email` (join key identitas) **sengaja tidak** di-mask. Tuning pola di `otel-collector-config.yaml` → `processors.transform/pii`.
+
+## Satu sumber OTel → SigNoz
+
+Semua data menyatu di **collector**: telemetri native Claude Code **dan** event hooks (`trap.mjs` mem-POST OTLP ke `/v1/logs`). Untuk melihat di **SigNoz**:
+
+1. Jalankan SigNoz (stack terpisah); collector OTLP-nya mis. di `:4317`.
+2. Di `otel-collector-config.yaml`: hapus komentar exporter `otlp/signoz`, set env `SIGNOZ_OTLP_ENDPOINT` (mis. `host.docker.internal:4317`), lalu tambahkan `otlp/signoz` ke `exporters` di **kedua** pipeline.
+3. `docker compose up -d` → seluruh event (termasuk hooks) mengalir ke SigNoz.
+
+**Banyak pengguna → 1 OTel**: arahkan `OTEL_EXPORTER_OTLP_ENDPOINT` (Claude Code) & `TRAP_OTLP_ENDPOINT` (hooks) tiap developer ke **satu collector pusat** (via managed-settings), collector itu redaksi PII lalu ekspor ke **satu SigNoz**.
 
 ## Skema event
 Audit JSONL mengikuti **Common Event Format v1** (`LLD-Activity-Trapping-Service.md §5`): `event_id, correlation_id, timestamp, capture_layer, user_id, platform, surface, event_kind, tool_name, tool_input, decision, mcp_invocation, ...`.
