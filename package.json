@@ -9,7 +9,8 @@
     "install:hooks": "node scripts/merge-settings.mjs",
     "install:hooks:dry": "node scripts/merge-settings.mjs --dry-run",
     "uninstall:hooks": "node scripts/merge-settings.mjs --uninstall",
-    "reconcile": "node scripts/reconcile.mjs"
+    "reconcile": "node scripts/reconcile.mjs",
+    "dashboard": "node dashboard/server.mjs"
   },
   "engines": {
     "node": ">=18"

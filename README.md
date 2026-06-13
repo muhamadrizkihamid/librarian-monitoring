@@ -66,6 +66,17 @@ node scripts/merge-settings.mjs --uninstall   # hapus env + hooks kita (backup t
 docker compose down
 ```
 
+## Dashboard monitoring
+
+Web dashboard ringan (tanpa dependensi) untuk melihat aktivitas secara visual:
+
+```bash
+npm run dashboard         # atau: node dashboard/server.mjs   (PORT=9000 utk ganti port)
+# buka http://localhost:8090
+```
+
+Menampilkan (auto-refresh 3 dtk): kartu ringkasan (event hooks, allow/flag/block, event SIEM, API request, est. biaya), tabel **aktivitas terbaru**, tabel **enforcement (block/flag)**, dan **SIEM event by name**. Sumber: `data/audit` + `data/siem`.
+
 ## Enforcement / Block (PreToolUse)
 
 Kebijakan ada di **`config/policy.json`** (ber-`version`), dievaluasi oleh `hooks/policy.mjs` saat `PreToolUse`. Tiap keputusan (`allow`/`block`/`flag`) ikut tercatat di audit dengan `policy_rule_id`, `decision_reason`, `policy_version`.

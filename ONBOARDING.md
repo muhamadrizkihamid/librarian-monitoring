@@ -65,6 +65,13 @@ cat data/siem/hec-received.jsonl      # event yang masuk ke SIEM (mock)
 docker compose ps                     # collector + siem-mock UP
 ```
 
+## 4b. Dashboard (lihat secara visual)
+
+```bash
+npm run dashboard     # buka http://localhost:8090 (auto-refresh)
+```
+Ringkasan event, allow/flag/block, biaya, aktivitas terbaru, dan event SIEM. Untuk monitor live di terminal: `node scripts/watch.mjs`.
+
 ## 5. Pemakaian harian
 
 - Collector & mock SIEM `restart: unless-stopped` → hidup lagi otomatis saat Docker start. Setelah reboot, pastikan Docker Desktop jalan (di Windows mungkin perlu set `DOCKER_HOST` lalu `npm run up`).
