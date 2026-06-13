@@ -156,6 +156,13 @@ npm run build:managed -- --endpoint=https://otel.bankmega.internal:4318 --trap-d
 # hasil: dist/managed-settings.json
 ```
 
+**Paket deploy Windows (1 perintah, PowerShell sebagai Administrator):**
+```powershell
+.\scripts\deploy-managed.ps1 -Endpoint http://localhost:4318          # uji lokal
+.\scripts\deploy-managed.ps1 -Endpoint https://otel.bankmega.internal:4318   # produksi/pusat
+```
+Skrip ini: generate managed-settings → salin `hooks/`+`config/` ke `C:\ProgramData\claude-trapping` → pasang `managed-settings.json` ke `C:\Program Files\ClaudeCode`. Cabut: `.\scripts\uninstall-managed.ps1` (admin).
+
 Deploy per mesin (via MDM):
 1. Salin folder **`hooks/`** dan **`config/`** ke `__TRAP_DIR__` (mis. `C:\ProgramData\claude-trapping`).
 2. Salin `dist/managed-settings.json` ke path managed-settings OS (**butuh admin**):
