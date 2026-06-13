@@ -131,15 +131,20 @@ cat data/siem/hec-received.jsonl    # event format Splunk HEC (event, fields, so
 
 Collector menjalankan processor `transform/pii` pada pipeline **logs**: mask **NIK / no. kartu (13–19 digit), email, no. telepon ID** di field **konten** (`prompt`, `body`/response, `command`, `full_command`, `tool_input`) **sebelum** diekspor ke sink. `user.email` (join key identitas) **sengaja tidak** di-mask. Tuning pola di `otel-collector-config.yaml` → `processors.transform/pii`.
 
-## Satu sumber OTel → SigNoz
+## Satu sumber OTel → SigNoz (live)
 
-Semua data menyatu di **collector**: telemetri native Claude Code **dan** event hooks (`trap.mjs` mem-POST OTLP ke `/v1/logs`). Untuk melihat di **SigNoz**:
+Semua data menyatu di **collector kita** (telemetri native Claude Code **+** event hooks via OTLP), di-redaksi PII, lalu di-forward ke **SigNoz**. UI: **http://localhost:8080**.
 
-1. Jalankan SigNoz (stack terpisah); collector OTLP-nya mis. di `:4317`.
-2. Di `otel-collector-config.yaml`: hapus komentar exporter `otlp/signoz`, set env `SIGNOZ_OTLP_ENDPOINT` (mis. `host.docker.internal:4317`), lalu tambahkan `otlp/signoz` ke `exporters` di **kedua** pipeline.
-3. `docker compose up -d` → seluruh event (termasuk hooks) mengalir ke SigNoz.
+**Deploy SigNoz (sekali):**
+1. Di luar repo ini: `git clone --depth 1 https://github.com/SigNoz/signoz.git`
+2. Hindari bentrok port dgn collector kita — di `signoz/deploy/docker/docker-compose.yaml` remap collector SigNoz: `4317:4317`→`4319:4317`, `4318:4318`→`4320:4318`.
+3. `cd signoz/deploy/docker && docker compose up -d`
+4. **WAJIB onboarding**: buka `http://localhost:8080`, buat akun admin/organisasi. **Tanpa organisasi, collector SigNoz menolak provisioning** (opamp: *"cannot create agent without orgId"*) → tidak ada ingest. Alternatif via API: `POST /api/v1/register {name,orgName,email,password}`.
+5. Collector kita sudah di-set forward ke `host.docker.internal:4319` (env `SIGNOZ_OTLP_ENDPOINT` di `docker-compose.yml`). `docker compose up -d` (stack kita) → data mengalir.
 
-**Banyak pengguna → 1 OTel**: arahkan `OTEL_EXPORTER_OTLP_ENDPOINT` (Claude Code) & `TRAP_OTLP_ENDPOINT` (hooks) tiap developer ke **satu collector pusat** (via managed-settings), collector itu redaksi PII lalu ekspor ke **satu SigNoz**.
+**Lihat data**: SigNoz → Logs / Metrics, filter `service.name` = `claude-code` (native) atau `claude-code-hook` (hooks). Event `claude_code.hook.*`, `user_prompt`, `api_request(_body)`, dll.
+
+**Banyak pengguna → 1 OTel**: arahkan `OTEL_EXPORTER_OTLP_ENDPOINT` (Claude Code) & `TRAP_OTLP_ENDPOINT` (hooks) tiap developer ke **satu collector pusat** (via managed-settings) → redaksi PII di sana → **satu SigNoz**.
 
 ## Skema event
 Audit JSONL mengikuti **Common Event Format v1** (`LLD-Activity-Trapping-Service.md §5`): `event_id, correlation_id, timestamp, capture_layer, user_id, platform, surface, event_kind, tool_name, tool_input, decision, mcp_invocation, ...`.

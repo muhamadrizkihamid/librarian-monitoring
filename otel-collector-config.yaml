@@ -55,13 +55,12 @@ exporters:
     disable_compression: true
     tls:
       insecure_skip_verify: true
-  # SigNoz (tujuan utama "1 OTel"). AKTIFKAN: hapus komentar + set env SIGNOZ_OTLP_ENDPOINT
-  # (mis. host.docker.internal:4317 ke collector SigNoz), lalu tambahkan 'otlp/signoz' ke
-  # exporters kedua pipeline di bawah. Lihat README bagian "Kirim ke SigNoz".
-  # otlp/signoz:
-  #   endpoint: "${env:SIGNOZ_OTLP_ENDPOINT}"
-  #   tls:
-  #     insecure: true
+  # SigNoz (tujuan utama "1 OTel"). Collector SigNoz dipetakan ke host :4319 (gRPC).
+  # Ganti endpoint ke collector pusat saat multi-user.
+  otlp/signoz:
+    endpoint: "${env:SIGNOZ_OTLP_ENDPOINT}"
+    tls:
+      insecure: true
 
 service:
   telemetry:
@@ -71,8 +70,8 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [file/metrics, debug, splunk_hec/siem]
+      exporters: [file/metrics, debug, splunk_hec/siem, otlp/signoz]
     logs:
       receivers: [otlp]
       processors: [transform/pii, batch]   # redaksi PII sebelum ekspor
-      exporters: [file/logs, debug, splunk_hec/siem]   # + otlp/signoz saat SigNoz aktif
+      exporters: [file/logs, debug, splunk_hec/siem, otlp/signoz]

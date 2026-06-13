@@ -10,6 +10,11 @@ services:
     command: ["--config=/etc/otelcol-contrib/config.yaml"]
     depends_on:
       - siem-mock
+    environment:
+      # Collector SigNoz dipetakan ke host :4319 (lihat signoz-deploy). Multi-user: ganti ke collector pusat.
+      - SIGNOZ_OTLP_ENDPOINT=host.docker.internal:4319
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml:ro
       - ./data:/data
