@@ -146,6 +146,27 @@ Semua data menyatu di **collector kita** (telemetri native Claude Code **+** eve
 
 **Banyak pengguna → 1 OTel**: arahkan `OTEL_EXPORTER_OTLP_ENDPOINT` (Claude Code) & `TRAP_OTLP_ENDPOINT` (hooks) tiap developer ke **satu collector pusat** (via managed-settings) → redaksi PII di sana → **satu SigNoz**.
 
+## Rollout via managed-settings (MDM, banyak pengguna)
+
+MVP memakai **user-settings** (per developer, bisa di-override). Untuk produksi/banyak pengguna gunakan **managed-settings** — **immutable**, di-push via MDM, semua dev mengirim ke **satu collector pusat**.
+
+```bash
+# generate managed-settings.json (arahkan ke collector pusat)
+npm run build:managed -- --endpoint=https://otel.bankmega.internal:4318 --trap-dir=C:/ProgramData/claude-trapping
+# hasil: dist/managed-settings.json
+```
+
+Deploy per mesin (via MDM):
+1. Salin folder **`hooks/`** dan **`config/`** ke `__TRAP_DIR__` (mis. `C:\ProgramData\claude-trapping`).
+2. Salin `dist/managed-settings.json` ke path managed-settings OS (**butuh admin**):
+   - Windows: `C:\Program Files\ClaudeCode\managed-settings.json`
+   - macOS: `/Library/Application Support/ClaudeCode/managed-settings.json`
+   - Linux/WSL: `/etc/claude-code/managed-settings.json`
+3. Pastikan **Node.js** terpasang & mesin bisa akses collector pusat.
+4. Developer yang sudah pasang user-settings: `npm run uninstall:hooks` agar tidak dobel.
+
+Managed-settings **tidak bisa di-override user** (env, hooks, `disableBypassPermissionsMode`). Hooks managed **digabung** dengan hooks user lain (mis. GSD) sesuai precedence. Collector pusat menjalankan redaksi PII lalu ekspor ke **satu SigNoz**.
+
 ## Skema event
 Audit JSONL mengikuti **Common Event Format v1** (`LLD-Activity-Trapping-Service.md §5`): `event_id, correlation_id, timestamp, capture_layer, user_id, platform, surface, event_kind, tool_name, tool_input, decision, mcp_invocation, ...`.
 

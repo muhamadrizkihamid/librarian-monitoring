@@ -9,6 +9,7 @@
     "install:hooks": "node scripts/merge-settings.mjs",
     "install:hooks:dry": "node scripts/merge-settings.mjs --dry-run",
     "uninstall:hooks": "node scripts/merge-settings.mjs --uninstall",
+    "build:managed": "node scripts/build-managed-settings.mjs",
     "reconcile": "node scripts/reconcile.mjs",
     "dashboard": "node dashboard/server.mjs"
   },

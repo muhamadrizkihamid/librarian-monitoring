@@ -4,6 +4,9 @@ data/
 # Backup settings yang dibuat installer
 *.bak-*
 
+# Output generate (managed-settings spesifik lingkungan)
+dist/
+
 # Node / OS
 node_modules/
 *.log
