@@ -72,7 +72,7 @@ Berjalan sebagai **container** (`trapping-dashboard`) — ikut naik dengan `dock
 
 - **Live via WebSocket** (`/ws`, raw RFC6455, tanpa dependensi) — server mendeteksi event baru (~0.7 dtk) lalu **push per-event granular** ke browser (live ticker). Indikator **● LIVE (WebSocket)**. Fallback otomatis: polling `/api/data` bila WS tak tersedia.
 - **Filter**: per-**user**, per-**tool**, dan **rentang waktu** (15m / 1j / 24j / semua) — semua tampilan (kartu, grafik, tabel) mengikuti filter.
-- Menampilkan: kartu ringkasan (event, allow/flag/block, event SIEM, biaya rentang), **grafik tren event & biaya per waktu** (SVG inline), **live ticker**, **aktivitas terbaru**, **enforcement (block/flag)**, **SIEM event by name**.
+- Menampilkan: kartu ringkasan (event, allow/flag/block, event SIEM, **token in/out**, biaya), **grafik tren event & biaya**, **live ticker**, **Telemetri OTel** (percakapan **prompt → response**, model, token, biaya + chip **skill / plugin / slash-command**), **aktivitas terbaru**, **enforcement**, **SIEM by name**.
 - Container mount `data/` **read-only**; tanpa dependensi npm.
 
 ```bash
@@ -131,7 +131,7 @@ cat data/siem/hec-received.jsonl    # event format Splunk HEC (event, fields, so
 Audit JSONL mengikuti **Common Event Format v1** (`LLD-Activity-Trapping-Service.md §5`): `event_id, correlation_id, timestamp, capture_layer, user_id, platform, surface, event_kind, tool_name, tool_input, decision, mcp_invocation, ...`.
 
 ## ⚠️ Keamanan & privasi
-- Mode **FULL** menangkap **isi prompt & command** → `data/` berisi data sensitif. Sudah di-`.gitignore`; jangan commit/keluarkan.
+- Mode **FULL** menangkap **isi prompt, command, dan TEKS RESPONSE Claude** (`OTEL_LOG_RAW_API_BODIES=1`, body ~60KB) → `data/` berisi data sangat sensitif. Sudah di-`.gitignore`; jangan commit/keluarkan. Body mentah API juga ke SIEM.
 - `user_id` dari hook = username mesin (placeholder). `user_id` otoritatif (email korporat) datang dari OTel (`user.email`) / IdP.
 - Untuk **produksi**: pindahkan config ke **managed-settings** (`C:\Program Files\ClaudeCode\managed-settings.json`, butuh admin, immutable), aktifkan redaksi PII di collector, arahkan exporter ke SIEM/WORM, dan libatkan **Legal** (UU PDP) sebelum logging konten.
 - **L3 proxy** sengaja tidak diaktifkan: mengarahkan `ANTHROPIC_BASE_URL` ke proxy yang belum ada akan memutus CLI.

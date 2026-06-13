@@ -31,8 +31,9 @@ const TRAP_ENV = {
   OTEL_LOGS_EXPORTER: 'otlp',
   OTEL_EXPORTER_OTLP_PROTOCOL: 'http/protobuf',
   OTEL_EXPORTER_OTLP_ENDPOINT: 'http://localhost:4318',
-  OTEL_LOG_USER_PROMPTS: '1',     // mode FULL (prompt) — review Legal utk produksi
-  OTEL_LOG_TOOL_DETAILS: '1',     // mode FULL (command/MCP/skill names)
+  OTEL_LOG_USER_PROMPTS: '1',     // teks prompt penuh
+  OTEL_LOG_TOOL_DETAILS: '1',     // command/MCP/skill/plugin/slash-command names
+  OTEL_LOG_RAW_API_BODIES: '1',   // body request+response (TEKS RESPONSE Claude). Sangat sensitif & besar (trunc ~60KB). Review Legal utk produksi.
   OTEL_METRIC_EXPORT_INTERVAL: '10000',
   OTEL_LOGS_EXPORT_INTERVAL: '2000',
 };

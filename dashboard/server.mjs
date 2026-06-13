@@ -56,9 +56,32 @@ function siemAggregate(siem) {
   }
   return { costPoints, siemByName: byName, emails: [...emails] };
 }
+// Ekstrak teks dari body response API (JSON Messages) -> gabungan blok teks
+function respText(body) {
+  if (!body) return '';
+  try { const o = JSON.parse(body); if (Array.isArray(o.content)) return o.content.filter((b) => b.type === 'text').map((b) => b.text).join('\n'); } catch {}
+  return String(body);
+}
+// Telemetri kaya dari OTel/SIEM: korelasi prompt<->request<->response via prompt.id
+function loadTelemetry(siem) {
+  const byPid = {}; let tIn = 0, tOut = 0, cost = 0;
+  const skills = {}, plugins = {}, commands = {};
+  const get = (pid) => byPid[pid] || (byPid[pid] = { promptId: pid, ts: 0, session: '', prompt: '', response: '', model: '', tokensIn: 0, tokensOut: 0, cost: 0 });
+  for (const s of siem) {
+    const f = s.fields, nn = (s.name || '').replace(/^claude_code\./, ''), pid = f['prompt.id'] || ('_' + (f['session.id'] || 'x')), ts = s.time ? s.time * 1000 : 0;
+    if (nn === 'user_prompt') { const r = get(pid); r.prompt = (f.prompt || r.prompt || '').slice(0, 2000); r.session = f['session.id'] || r.session; if (ts) r.ts = ts; if (f.command_name) commands[f.command_name] = (commands[f.command_name] || 0) + 1; }
+    else if (nn === 'api_request') { const r = get(pid); const i = +f.input_tokens || 0, o = +f.output_tokens || 0, c = +f.cost_usd || 0; r.tokensIn += i; r.tokensOut += o; r.cost += c; r.model = f.model || r.model; if (ts) r.ts = ts; tIn += i; tOut += o; cost += c; }
+    else if (nn === 'api_response_body') { const r = get(pid); r.response = (respText(f.body) || r.response || '').slice(0, 1500); if (ts) r.ts = ts; }
+    else if (nn === 'skill_activated') { const k = f['skill.name'] || '?'; skills[k] = (skills[k] || 0) + 1; }
+    else if (nn === 'plugin_loaded' || nn === 'plugin_installed') { const k = f['plugin.name'] || '?'; plugins[k] = (plugins[k] || 0) + 1; }
+  }
+  const conversations = Object.values(byPid).filter((r) => r.prompt || r.response).sort((a, b) => a.ts - b.ts).slice(-50);
+  return { tokensIn: tIn, tokensOut: tOut, cost: Number(cost.toFixed(4)), skills, plugins, commands, conversations };
+}
 function buildData() {
   const events = loadHooks().slice(-MAXEV).map(mapEvent);
-  return { generatedAt: new Date().toISOString(), events, ...siemAggregate(loadSiem()) };
+  const siem = loadSiem();
+  return { generatedAt: new Date().toISOString(), events, ...siemAggregate(siem), telemetry: loadTelemetry(siem) };
 }
 
 // ---------------- WebSocket (raw RFC6455, server->client) ----------------
@@ -87,7 +110,7 @@ setInterval(() => {
     lastCount = hooks.length;
   }
   const ss = siemSig();
-  if (ss !== lastSiemSig) { lastSiemSig = ss; broadcast({ type: 'meta', ...siemAggregate(loadSiem()) }); }
+  if (ss !== lastSiemSig) { lastSiemSig = ss; const siem = loadSiem(); broadcast({ type: 'meta', ...siemAggregate(siem), telemetry: loadTelemetry(siem) }); }
 }, 700);
 setInterval(() => { const ping = wsFrame('', 0x9); for (const s of wsClients) { try { s.write(ping); } catch {} } }, 20000);
 
@@ -154,6 +177,10 @@ const PAGE = `<!doctype html><html lang="id"><head><meta charset="utf-8">
     <div class="card"><h2>Tren biaya / waktu</h2><div id="chartCost"></div><div class="muted" id="costLegend" style="font-size:11px;margin-top:6px"></div></div>
   </div>
   <div class="card"><h2>Live ticker (event granular via WebSocket)</h2><div id="ticker"></div></div>
+  <div class="card"><h2>Telemetri OTel — prompt → response · skill / plugin / command · token</h2>
+    <div class="sub" id="spc" style="margin-bottom:8px"></div>
+    <table><thead><tr><th>Waktu</th><th>Model</th><th>Tok in/out</th><th>$</th><th>Prompt</th><th>Response</th></tr></thead><tbody id="conv"></tbody></table>
+  </div>
   <div class="grid2">
     <div class="card"><h2>Aktivitas terbaru</h2><table><thead><tr><th>Waktu</th><th>User</th><th>Jenis</th><th>Tool</th><th>Keputusan</th></tr></thead><tbody id="recent"></tbody></table></div>
     <div class="card"><h2>Enforcement (block / flag)</h2><table><thead><tr><th>Waktu</th><th>Keputusan</th><th>Tool</th><th>Rule</th></tr></thead><tbody id="enf"></tbody></table>
@@ -164,8 +191,11 @@ const PAGE = `<!doctype html><html lang="id"><head><meta charset="utf-8">
 <script>
 const t=ms=>new Date(ms).toISOString().slice(11,19);
 const hhmm=ms=>new Date(ms).toISOString().slice(11,16);
-let S={events:[],costPoints:[],siemByName:{},emails:[]};
+let S={events:[],costPoints:[],siemByName:{},emails:[],telemetry:{tokensIn:0,tokensOut:0,cost:0,skills:{},plugins:{},commands:{},conversations:[]}};
 let filt={user:'',tool:'',range:0};
+const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');
+const snip=(s,n)=>{s=(s||'').replace(/\s+/g,' ').trim();return esc(s.length>n?s.slice(0,n)+'…':s);};
+const chips=o=>Object.entries(o||{}).map(([k,v])=>k+'×'+v).join(', ')||'-';
 
 function within(ts){return !filt.range||ts>=Date.now()-filt.range;}
 function fEvents(){return S.events.filter(e=>within(e.ts)&&(!filt.user||e.user===filt.user)&&(!filt.tool||e.tool===filt.tool));}
@@ -216,11 +246,17 @@ function render(){
   const cum=cost.reduce((s,c)=>s+c.cost,0);
   document.getElementById('meta').textContent=S.events.length+' event · user: '+(S.emails.join(', ')||'-');
   document.getElementById('filtinfo').textContent='menampilkan '+ev.length+' event'+(filt.user?' · user='+filt.user:'')+(filt.tool?' · tool='+filt.tool:'');
+  const tel=S.telemetry||{tokensIn:0,tokensOut:0,cost:0,skills:{},plugins:{},commands:{},conversations:[]};
   document.getElementById('cards').innerHTML=[
     card(ev.length,'Event'),card(dec.allow,'Allow','ok'),card(dec.flag,'Flag','flag'),card(dec.block,'Block','block'),
-    card(Object.values(S.siemByName).reduce((a,b)=>a+b,0),'Event SIEM'),card('$'+cum.toFixed(4),'Biaya (rentang)')
+    card(Object.values(S.siemByName).reduce((a,b)=>a+b,0),'Event SIEM'),
+    card(tel.tokensIn+' / '+tel.tokensOut,'Token in/out'),card('$'+(tel.cost||0).toFixed(4),'Biaya total')
   ].join('');
   const ts=buildTS(ev,cost);renderEvents(ts);renderCost(ts);
+  // Telemetri OTel: chips + percakapan
+  document.getElementById('spc').innerHTML='Skills: '+chips(tel.skills)+' &nbsp;|&nbsp; Plugins: '+chips(tel.plugins)+' &nbsp;|&nbsp; Slash-commands: '+chips(tel.commands);
+  const conv=(tel.conversations||[]).filter(c=>within(c.ts)).slice(-40).reverse();
+  document.getElementById('conv').innerHTML=conv.map(c=>'<tr><td class="mono">'+t(c.ts)+'</td><td class="mono">'+(c.model||'')+'</td><td class="mono">'+c.tokensIn+'/'+c.tokensOut+'</td><td class="mono">$'+(c.cost||0).toFixed(4)+'</td><td title="'+esc(c.prompt)+'">'+snip(c.prompt,70)+'</td><td title="'+esc(c.response)+'">'+snip(c.response,70)+'</td></tr>').join('')||'<tr><td colspan=6 class=muted>belum ada percakapan (perlu sesi claude baru dgn raw bodies aktif)</td></tr>';
   document.getElementById('recent').innerHTML=ev.slice(-60).reverse().map(r=>'<tr><td class="mono">'+t(r.ts)+'</td><td>'+r.user+'</td><td>'+r.kind+'</td><td class="mono">'+(r.tool||'')+(r.mcp?' <span class=muted>['+r.mcp+']</span>':'')+'</td><td><span class="pill '+r.decision+'">'+r.decision+'</span></td></tr>').join('')||'<tr><td colspan=5 class=muted>belum ada aktivitas</td></tr>';
   document.getElementById('enf').innerHTML=ev.filter(e=>e.decision!=='allow').slice(-30).reverse().map(r=>'<tr><td class="mono">'+t(r.ts)+'</td><td><span class="pill '+r.decision+'">'+r.decision+'</span></td><td class="mono">'+r.tool+'</td><td class="mono muted">'+r.rule+'</td></tr>').join('')||'<tr><td colspan=4 class=muted>belum ada block/flag</td></tr>';
   document.getElementById('siem').innerHTML=Object.entries(S.siemByName).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'<tr><td class="mono">'+k+'</td><td style="text-align:right">'+v+'</td></tr>').join('')||'<tr><td class=muted>belum ada event SIEM</td></tr>';
@@ -243,7 +279,7 @@ function connectWS(){
   ws.onmessage=m=>{let msg;try{msg=JSON.parse(m.data);}catch{return;}
     if(msg.type==='init'){S=msg.data;render();}
     else if(msg.type==='event'){S.events.push(msg.e);if(S.events.length>3000)S.events.shift();pushTicker(msg.e);render();}
-    else if(msg.type==='meta'){S.costPoints=msg.costPoints;S.siemByName=msg.siemByName;S.emails=msg.emails;render();}
+    else if(msg.type==='meta'){S.costPoints=msg.costPoints;S.siemByName=msg.siemByName;S.emails=msg.emails;if(msg.telemetry)S.telemetry=msg.telemetry;render();}
   };
   ws.onclose=()=>{live.innerHTML='<span class="flag">●</span> menyambung ulang…';setTimeout(connectWS,2000);};
   ws.onerror=()=>ws.close();
