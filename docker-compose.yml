@@ -17,6 +17,21 @@ services:
       - "4317:4317"   # OTLP gRPC
       - "4318:4318"   # OTLP HTTP
 
+  # Dashboard monitoring (live/SSE). Baca data/ read-only, dorong update ke browser real-time.
+  dashboard:
+    image: node:20-alpine
+    container_name: trapping-dashboard
+    restart: unless-stopped
+    command: ["node", "/app/server.mjs"]
+    environment:
+      - DATA_DIR=/data
+      - PORT=8090
+    volumes:
+      - ./dashboard/server.mjs:/app/server.mjs:ro
+      - ./data:/data:ro
+    ports:
+      - "8090:8090"
+
   # Mock SIEM (Splunk HEC) untuk uji jalur exporter. Ganti dgn Splunk korporat saat siap.
   siem-mock:
     image: node:20-alpine

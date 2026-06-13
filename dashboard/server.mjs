@@ -12,7 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const DATA = path.resolve(__dirname, '..', 'data');
+const DATA = process.env.DATA_DIR || path.resolve(__dirname, '..', 'data');
 const AUDIT = path.join(DATA, 'audit');
 const SIEM = path.join(DATA, 'siem', 'hec-received.jsonl');
 const PORT = Number(process.env.PORT || 8090);
@@ -147,7 +147,7 @@ const PAGE = `<!doctype html><html lang="id"><head><meta charset="utf-8">
   h2{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);margin:0 0 8px}
 </style></head><body>
 <header><div><h1>🛡️ Activity Trapping — Claude Code CLI</h1><div class="sub" id="meta">memuat…</div></div>
-<div class="sub">auto-refresh 3s · sumber: data/audit + data/siem</div></header>
+<div class="sub" id="live">● menyambung…</div></header>
 <div class="wrap">
   <div class="cards" id="cards"></div>
   <div class="grid2">
@@ -192,8 +192,7 @@ function renderCost(ts){
   el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%">'+area+line+ax+'</svg>';
   document.getElementById('costLegend').textContent='biaya kumulatif (USD) · bucket '+(ts.bucketMs/60000)+' menit';
 }
-async function tick(){
-  let d; try{ d=await (await fetch('/api/summary')).json() }catch{ return }
+function render(d){
   const h=d.hooks,s=d.siem;
   document.getElementById('meta').textContent='diperbarui '+t(d.generatedAt)+' · '+h.sessions+' sesi · user: '+(s.emails.join(', ')||h.users.join(', ')||'-');
   document.getElementById('cards').innerHTML=[
@@ -210,10 +209,44 @@ async function tick(){
   document.getElementById('siem').innerHTML=Object.entries(s.byName).sort((a,b)=>b[1]-a[1]).map(([k,v])=>'<tr><td class="mono">'+k+'</td><td style="text-align:right">'+v+'</td></tr>').join('')||'<tr><td class=muted>belum ada event SIEM (perlu sesi claude baru)</td></tr>';
   renderEvents(d.timeseries); renderCost(d.timeseries);
 }
-tick(); setInterval(tick,3000);
+const live=document.getElementById('live');
+if(window.EventSource){
+  const es=new EventSource('/events');
+  es.onopen=()=>{live.innerHTML='<span class="ok">●</span> LIVE';};
+  es.onmessage=e=>{try{render(JSON.parse(e.data));}catch{}};
+  es.onerror=()=>{live.innerHTML='<span class="flag">●</span> menyambung ulang…';};
+}else{
+  live.textContent='polling 3s (browser tanpa SSE)';
+  async function poll(){try{render(await (await fetch('/api/summary')).json());}catch{}}
+  poll(); setInterval(poll,3000);
+}
 </script></body></html>`;
 
+// --- Live push (SSE): deteksi perubahan file sisi-server, dorong ke klien ---
+const clients = new Set();
+function stateSig() {
+  let s = '';
+  try { for (const f of fs.readdirSync(AUDIT).filter((x) => x.startsWith('hooks-'))) { const st = fs.statSync(path.join(AUDIT, f)); s += `${f}:${st.size}:${st.mtimeMs};`; } } catch {}
+  try { const st = fs.statSync(SIEM); s += `siem:${st.size}:${st.mtimeMs}`; } catch {}
+  return s;
+}
+let lastSig = '';
+function broadcast() {
+  const payload = `data: ${JSON.stringify(summary())}\n\n`;
+  for (const res of clients) { try { res.write(payload); } catch {} }
+}
+setInterval(() => { const s = stateSig(); if (s !== lastSig) { lastSig = s; broadcast(); } }, 700); // near-live
+setInterval(() => { for (const res of clients) { try { res.write(': ping\n\n'); } catch {} } }, 15000); // heartbeat
+
 const server = http.createServer((req, res) => {
+  if (req.url.startsWith('/events')) {
+    res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
+    res.write('retry: 2000\n\n');
+    res.write(`data: ${JSON.stringify(summary())}\n\n`); // snapshot awal
+    clients.add(res);
+    req.on('close', () => clients.delete(res));
+    return;
+  }
   if (req.url.startsWith('/api/summary')) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify(summary()));
@@ -221,4 +254,4 @@ const server = http.createServer((req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
   res.end(PAGE);
 });
-server.listen(PORT, () => console.log(`Trapping dashboard: http://localhost:${PORT}`));
+server.listen(PORT, () => console.log(`Trapping dashboard (live/SSE): http://localhost:${PORT}`));

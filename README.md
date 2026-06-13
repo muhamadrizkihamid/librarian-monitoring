@@ -66,16 +66,18 @@ node scripts/merge-settings.mjs --uninstall   # hapus env + hooks kita (backup t
 docker compose down
 ```
 
-## Dashboard monitoring
+## Dashboard monitoring (Docker, live)
 
-Web dashboard ringan (tanpa dependensi) untuk melihat aktivitas secara visual:
+Berjalan sebagai **container** (`trapping-dashboard`) — ikut naik dengan `docker compose up -d`. Buka **http://localhost:8090**.
+
+- **Live push (SSE)** — bukan refresh periodik. Server mendeteksi perubahan `data/` (~0.7 dtk) lalu mendorong update ke browser real-time. Indikator **● LIVE** di header.
+- Menampilkan: kartu ringkasan (event hooks, allow/flag/block, event SIEM, API request, est. biaya), **grafik tren event & biaya per waktu** (SVG inline), **aktivitas terbaru**, **enforcement (block/flag)**, **SIEM event by name**.
+- Container mount `data/` **read-only**; tanpa dependensi npm.
 
 ```bash
-npm run dashboard         # atau: node dashboard/server.mjs   (PORT=9000 utk ganti port)
-# buka http://localhost:8090
+docker compose up -d dashboard      # atau seluruh stack: docker compose up -d
+# dev lokal (opsional, tanpa docker): node dashboard/server.mjs  [PORT=9000]
 ```
-
-Menampilkan (auto-refresh 3 dtk): kartu ringkasan (event hooks, allow/flag/block, event SIEM, API request, est. biaya), tabel **aktivitas terbaru**, tabel **enforcement (block/flag)**, dan **SIEM event by name**. Sumber: `data/audit` + `data/siem`.
 
 ## Enforcement / Block (PreToolUse)
 

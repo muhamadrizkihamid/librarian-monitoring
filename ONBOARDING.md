@@ -65,12 +65,9 @@ cat data/siem/hec-received.jsonl      # event yang masuk ke SIEM (mock)
 docker compose ps                     # collector + siem-mock UP
 ```
 
-## 4b. Dashboard (lihat secara visual)
+## 4b. Dashboard (lihat secara visual, live)
 
-```bash
-npm run dashboard     # buka http://localhost:8090 (auto-refresh)
-```
-Ringkasan event, allow/flag/block, biaya, aktivitas terbaru, dan event SIEM. Untuk monitor live di terminal: `node scripts/watch.mjs`.
+Dashboard berjalan sebagai **container** (ikut `docker compose up -d`). Buka **http://localhost:8090** — **live push (SSE)**, update real-time tanpa refresh, ada grafik tren event & biaya. Untuk monitor di terminal: `node scripts/watch.mjs`.
 
 ## 5. Pemakaian harian
 
