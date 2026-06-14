@@ -18,7 +18,7 @@ import os from 'node:os';
 import http from 'node:http';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
-import { evaluate, policyVersion } from './policy.mjs';
+import { evaluate, evaluatePrompt, policyVersion } from './policy.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const AUDIT_DIR = path.resolve(__dirname, '..', 'data', 'audit');
@@ -81,6 +81,7 @@ function emitOtlp(cef, done) {
     if (cef.policy_rule_id) attrs.push(attr('policy_rule_id', cef.policy_rule_id));
     if (cef.tool_input && typeof cef.tool_input.command === 'string') attrs.push(attr('command', cef.tool_input.command));
     if (cef.tool_input != null) attrs.push(attr('tool_input', JSON.stringify(cef.tool_input)));
+    if (cef.prompt) attrs.push(attr('prompt', cef.prompt));
     if (cef.mcp_invocation) attrs.push(attr('mcp_server', cef.mcp_invocation.mcp_server || ''));
     const payload = JSON.stringify({ resourceLogs: [{ resource: { attributes: [attr('service.name', 'claude-code-hook')] },
       scopeLogs: [{ logRecords: [{ timeUnixNano: `${Date.now()}000000`, body: { stringValue: 'claude_code.hook.' + cef.event_kind }, attributes: attrs }] }] }] });
@@ -100,10 +101,12 @@ function main() {
   const toolName = inp.tool_name || null;
   const failed = ev === 'PostToolUseFailure';
 
-  // --- Enforcement: hanya PreToolUse yang bisa memblokir ---
+  // --- Enforcement: PreToolUse (aksi) & UserPromptSubmit (teks prompt) bisa memblokir ---
   let verdict = { action: 'allow' };
   if (ev === 'PreToolUse') {
     verdict = evaluate(toolName, inp.tool_input);
+  } else if (ev === 'UserPromptSubmit') {
+    verdict = evaluatePrompt(inp.prompt);
   }
 
   const cef = {
@@ -123,6 +126,7 @@ function main() {
     tool_name: toolName,
     tool_use_id: inp.tool_use_id || null,
     tool_input: inp.tool_input ?? null,      // konten penuh (mode FULL)
+    prompt: ev === 'UserPromptSubmit' ? (inp.prompt ?? null) : null, // teks prompt (utk audit/redaksi PII)
     tool_response_ok: failed ? false : (ev === 'PostToolUse' ? true : null),
     decision: verdict.action === 'deny' ? 'block' : verdict.action, // allow|block|flag
     decision_reason: verdict.reason || null,
@@ -148,6 +152,12 @@ function main() {
         permissionDecision: 'deny',
         permissionDecisionReason: `[trapping/policy:${policyVersion}] ${verdict.reason}`,
       },
+    }));
+  } else if (ev === 'UserPromptSubmit' && verdict.action === 'deny') {
+    // Blokir prompt: Claude tidak memproses prompt; alasan ditampilkan ke user.
+    process.stdout.write(JSON.stringify({
+      decision: 'block',
+      reason: `[trapping/policy:${policyVersion}] ${verdict.reason}`,
     }));
   }
 

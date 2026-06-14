@@ -61,3 +61,22 @@ export function evaluate(toolName, toolInput) {
   }
   return { action: 'allow' };
 }
+
+/**
+ * Evaluasi TEKS PROMPT (UserPromptSubmit) terhadap prompt_rules.
+ * @returns {{action:'allow'|'deny'|'flag', rule_id?:string, reason?:string}}
+ */
+export function evaluatePrompt(prompt) {
+  try {
+    const text = String(prompt || '');
+    if (!text) return { action: 'allow' };
+    for (const rule of POLICY.prompt_rules || []) {
+      if (ruleHits(rule, text)) {
+        return { action: rule.action || 'flag', rule_id: rule.id, reason: rule.reason || '' };
+      }
+    }
+  } catch {
+    // fail-open
+  }
+  return { action: 'allow' };
+}

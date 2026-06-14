@@ -14,7 +14,6 @@ Implementasi nyata dari `LLD-Activity-Trapping-Service.md`, di-scope untuk **men
 | **SIEM** | ✅ mock | `siem-mock/` (Splunk HEC tiruan) → `data/siem/hec-received.jsonl`. Ganti ke Splunk korporat saat siap. |
 | **L3 egress/proxy** | 🟡 stub | `config/settings.snippet.json._proxy_stub_L3` (aktifkan saat proxy ada) |
 | **L4 compliance** | ⛔ N/A | butuh Enterprise + Compliance API key |
-| **Reconciler** | ✅ MVP | `scripts/reconcile.mjs` (L2 hooks vs L2 OTel) |
 
 ## Prasyarat
 - Claude Code CLI (terdeteksi: v2.1.177), Node.js, Docker (terdeteksi: v28.3.3).
@@ -54,9 +53,6 @@ cat data/audit/hooks-*.jsonl
 # cek collector hidup
 docker compose ps
 docker compose logs --tail=20 otel-collector
-
-# rekonsiliasi kelengkapan
-node scripts/reconcile.mjs
 ```
 
 ## Cabut (uninstall)
@@ -66,21 +62,19 @@ node scripts/merge-settings.mjs --uninstall   # hapus env + hooks kita (backup t
 docker compose down
 ```
 
-## Dashboard monitoring (Docker, live, WebSocket)
+## Dashboard monitoring
 
-Berjalan sebagai **container** (`trapping-dashboard`) — ikut naik dengan `docker compose up -d`. Buka **http://localhost:8090**.
+Dua lapis monitoring:
 
-- **Live via WebSocket** (`/ws`, raw RFC6455, tanpa dependensi) — server mendeteksi event baru (~0.7 dtk) lalu **push per-event granular** ke browser (live ticker). Indikator **● LIVE (WebSocket)**. Fallback otomatis: polling `/api/data` bila WS tak tersedia.
-- **Filter**: per-**user**, per-**tool**, dan **rentang waktu** (15m / 1j / 24j / semua) — semua tampilan (kartu, grafik, tabel) mengikuti filter.
-- Menampilkan: kartu ringkasan (event, allow/flag/block, event SIEM, **token in/out**, biaya), **grafik tren event & biaya**, **live ticker**, **Telemetri OTel** (percakapan **prompt → response**, model, token, biaya + chip **skill / plugin / slash-command**), **aktivitas terbaru**, **enforcement**, **SIEM by name**.
-- Container mount `data/` **read-only**; tanpa dependensi npm.
+- **`:8091` — Activity Trapping Live** (SATU-SATUNYA dashboard operasional; `live/server.mjs`, container `trapping-live`). **POLL ClickHouse (30 hari) → cache Redis (TTL 30 hari) → WebSocket** (`/ws`, raw RFC6455, tanpa dependensi). Liveness: tiap event HEC dari collector memicu refresh (debounce ~0.8s) + safety poll 5s. **Restart-safe** (rehydrate dari Redis). Panel: live event stream (hook/tool), KPI (token in/out, biaya, block/flag), **Percakapan user → sesi → prompt** + **filter user**, **Top 5 User · Usage Token**, **Top 5 User · Aktivitas CLI**.
+- **SigNoz** (`http://localhost:8080`) — dashboard analitis dari ClickHouse: #1 Activity Trapping (L2 Hooks), #2 Telemetry & Cost, #3 Prompt Drill-Down, #4 Activity & Token Audit (30 hari). Generator `scripts/build-signoz-*.mjs`, JSON importable `dashboard/*.json`.
 
 ```bash
-docker compose up -d dashboard      # atau seluruh stack: docker compose up -d
-# dev lokal (opsional, tanpa docker): node dashboard/server.mjs  [PORT=9000]
+docker compose up -d   # collector + redis + live(:8091) + siem-mock
 ```
 
-> Catatan identitas: filter **user** memakai `user_id` hook (username mesin); biaya/SIEM memakai `user.email` (OTel). Korelasi username↔email adalah gap yang ditutup di produksi via IdP (lihat LLD §B.5).
+> **Penyimpanan:** ClickHouse = backup permanen / source of truth; Redis = hot store dashboard (TTL 30 hari). :8091 ikut network eksternal `signoz-net` untuk query ClickHouse (`http://signoz-clickhouse:8123`).
+> **Identitas:** aktivitas hook memakai `session.id`→`user.email` (dipetakan via event api_request); user tak terpetakan dikelompokkan `?`. Data laptop/IP tidak ditangkap telemetry CLI (hanya terminal/OS).
 
 ## Enforcement / Block (PreToolUse)
 

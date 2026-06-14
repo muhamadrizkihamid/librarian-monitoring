@@ -1,0 +1,705 @@
+{
+  "title": "Claude Code — Prompt Drill-Down",
+  "description": "Pilih satu prompt (dropdown prompt_id) untuk melihat SELURUH request, response, dan tool action Claude CLI pada siklus prompt itu. Korelasi via atribut prompt.id (telemetry native OTel). Bagian Activity Trapping Service (ML LAB / Bank Mega).",
+  "tags": [
+    "claude-code",
+    "drill-down",
+    "prompt",
+    "telemetry"
+  ],
+  "layout": [
+    {
+      "i": "kpi-events",
+      "x": 0,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "kpi-tools",
+      "x": 3,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "kpi-resp",
+      "x": 6,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "kpi-tldecn",
+      "x": 9,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "list-picker",
+      "x": 0,
+      "y": 2,
+      "w": 12,
+      "h": 6
+    },
+    {
+      "i": "list-timeline",
+      "x": 0,
+      "y": 8,
+      "w": 12,
+      "h": 7
+    },
+    {
+      "i": "list-tools",
+      "x": 0,
+      "y": 15,
+      "w": 6,
+      "h": 6
+    },
+    {
+      "i": "list-resp",
+      "x": 6,
+      "y": 15,
+      "w": 6,
+      "h": 6
+    }
+  ],
+  "widgets": [
+    {
+      "id": "kpi-events",
+      "title": "Total Events (prompt)",
+      "description": "Jumlah seluruh event untuk prompt terpilih.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-events",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-tools",
+      "title": "Tool Calls",
+      "description": "Jumlah hasil tool (tool_result) untuk prompt terpilih.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-tools",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id AND tool_name EXISTS"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-resp",
+      "title": "Model Responses",
+      "description": "Jumlah response API model (api_response_body).",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-resp",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id AND attribute.event.name = 'api_response_body'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-tldecn",
+      "title": "Tool Decisions",
+      "description": "Jumlah keputusan tool (tool_decision: accept/deny).",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-tldecn",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id AND attribute.event.name = 'tool_decision'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "list-picker",
+      "title": "① Prompt terbaru — cocokkan teks dgn prompt.id di dropdown atas",
+      "description": "Daftar user_prompt terbaru. Lihat prompt.id-nya, lalu pilih di dropdown \"prompt_id\" di atas.",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "user.email"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "prompt"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "prompt.id"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-list-picker",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.event.name = 'user_prompt'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 50,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "desc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "list-timeline",
+      "title": "② Linimasa — semua aksi prompt terpilih (urut waktu)",
+      "description": "Seluruh event (request, response, tool) untuk prompt terpilih, urut kronologis.",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "event.name"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "tool_name"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "decision"
+        },
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "body"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-list-timeline",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 200,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "asc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "list-tools",
+      "title": "③ Tool Actions (decision + result)",
+      "description": "Aksi tool untuk prompt terpilih: nama tool, keputusan, input/hasil.",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "event.name"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "tool_name"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "decision"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "tool_input"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-list-tools",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id AND tool_name EXISTS"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 100,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "asc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "list-resp",
+      "title": "④ Model Responses (isi jawaban)",
+      "description": "Isi response API model (api_response_body) untuk prompt terpilih.",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "model"
+        },
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "body"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-list-resp",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id AND attribute.event.name = 'api_response_body'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 50,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "asc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    }
+  ],
+  "variables": {
+    "var-prompt-id": {
+      "id": "var-prompt-id",
+      "name": "prompt_id",
+      "description": "Pilih prompt (prompt.id) untuk di-drill-down. Cocokkan dengan tabel ① di bawah.",
+      "type": "QUERY",
+      "queryValue": "SELECT attributes_string['prompt.id'] AS prompt_id FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name'] = 'user_prompt' AND attributes_string['prompt.id'] != '' GROUP BY prompt_id ORDER BY max(timestamp) DESC LIMIT 50",
+      "customValue": "",
+      "textboxValue": "",
+      "multiSelect": false,
+      "showALLOption": false,
+      "sort": "DISABLED",
+      "order": 0,
+      "modificationUUID": "var-prompt-id",
+      "selectedValue": ""
+    }
+  },
+  "version": "v4"
+}

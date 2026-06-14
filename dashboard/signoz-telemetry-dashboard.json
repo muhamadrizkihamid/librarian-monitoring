@@ -1,0 +1,979 @@
+{
+  "title": "Claude Code — Telemetry & Cost (Native OTel)",
+  "description": "Biaya, token, dan percakapan (prompt→response) Claude Code dari telemetry native OTel (service.name=claude-code + metrics claude_code.*). Sumber sama dgn dashboard :8090 — satu collector OTel, beda signal (logs vs metrics). Bagian Activity Trapping Service (ML LAB / Bank Mega).",
+  "tags": [
+    "claude-code",
+    "telemetry",
+    "cost",
+    "tokens",
+    "native-otel"
+  ],
+  "layout": [
+    {
+      "i": "kpi-cost",
+      "x": 0,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "kpi-tokens",
+      "x": 3,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "kpi-active",
+      "x": 6,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "kpi-loc",
+      "x": 9,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "ts-cost",
+      "x": 0,
+      "y": 2,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "ts-token-type",
+      "x": 6,
+      "y": 2,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "tbl-cost-model",
+      "x": 0,
+      "y": 6,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "tbl-cost-user",
+      "x": 6,
+      "y": 6,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "ts-token-user",
+      "x": 0,
+      "y": 10,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "ts-prompts",
+      "x": 6,
+      "y": 10,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "list-prompts",
+      "x": 0,
+      "y": 14,
+      "w": 12,
+      "h": 5
+    },
+    {
+      "i": "list-resp",
+      "x": 0,
+      "y": 19,
+      "w": 12,
+      "h": 5
+    }
+  ],
+  "widgets": [
+    {
+      "id": "kpi-cost",
+      "title": "Total Cost (USD)",
+      "description": "Akumulasi biaya API Claude Code (metric claude_code.cost.usage).",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-cost",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "metricName": "claude_code.cost.usage",
+                  "temporality": "Delta",
+                  "timeAggregation": "sum",
+                  "spaceAggregation": "sum"
+                }
+              ],
+              "dataSource": "metrics",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": ""
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-tokens",
+      "title": "Total Tokens",
+      "description": "Total token (input+output+cache) — claude_code.token.usage.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-tokens",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "metricName": "claude_code.token.usage",
+                  "temporality": "Delta",
+                  "timeAggregation": "sum",
+                  "spaceAggregation": "sum"
+                }
+              ],
+              "dataSource": "metrics",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": ""
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-active",
+      "title": "Active Time (s)",
+      "description": "Total waktu aktif sesi — claude_code.active_time.total.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-active",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "metricName": "claude_code.active_time.total",
+                  "temporality": "Delta",
+                  "timeAggregation": "sum",
+                  "spaceAggregation": "sum"
+                }
+              ],
+              "dataSource": "metrics",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": ""
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-loc",
+      "title": "Lines of Code",
+      "description": "Baris kode ditambah/diubah — claude_code.lines_of_code.count.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-loc",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "metricName": "claude_code.lines_of_code.count",
+                  "temporality": "Delta",
+                  "timeAggregation": "sum",
+                  "spaceAggregation": "sum"
+                }
+              ],
+              "dataSource": "metrics",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": ""
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "ts-cost",
+      "title": "Cost over Time (USD)",
+      "description": "Biaya per interval waktu.",
+      "panelTypes": "graph",
+      "isStacked": false,
+      "fillSpans": true,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-ts-cost",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "metricName": "claude_code.cost.usage",
+                  "temporality": "Delta",
+                  "timeAggregation": "sum",
+                  "spaceAggregation": "sum"
+                }
+              ],
+              "dataSource": "metrics",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": ""
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "cost",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "ts-token-type",
+      "title": "Token Usage by Type",
+      "description": "input / output / cacheRead / cacheCreation dari waktu ke waktu.",
+      "panelTypes": "graph",
+      "isStacked": true,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-ts-token-type",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "metricName": "claude_code.token.usage",
+                  "temporality": "Delta",
+                  "timeAggregation": "sum",
+                  "spaceAggregation": "sum"
+                }
+              ],
+              "dataSource": "metrics",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": ""
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "type",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "{{type}}",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "tbl-cost-model",
+      "title": "Cost by Model",
+      "description": "Biaya dipecah per model.",
+      "panelTypes": "table",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-tbl-cost-model",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "metricName": "claude_code.cost.usage",
+                  "temporality": "Delta",
+                  "timeAggregation": "sum",
+                  "spaceAggregation": "sum"
+                }
+              ],
+              "dataSource": "metrics",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": ""
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "model",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "{{model}}",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "tbl-cost-user",
+      "title": "Cost by User",
+      "description": "Biaya dipecah per user.email.",
+      "panelTypes": "table",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-tbl-cost-user",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "metricName": "claude_code.cost.usage",
+                  "temporality": "Delta",
+                  "timeAggregation": "sum",
+                  "spaceAggregation": "sum"
+                }
+              ],
+              "dataSource": "metrics",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": ""
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "user.email",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "{{user.email}}",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "ts-token-user",
+      "title": "Token Usage by User",
+      "description": "Konsumsi token per user.email.",
+      "panelTypes": "graph",
+      "isStacked": true,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-ts-token-user",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "metricName": "claude_code.token.usage",
+                  "temporality": "Delta",
+                  "timeAggregation": "sum",
+                  "spaceAggregation": "sum"
+                }
+              ],
+              "dataSource": "metrics",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": ""
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "user.email",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "{{user.email}}",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "ts-prompts",
+      "title": "User Prompts over Time",
+      "description": "Jumlah prompt user (log event.name=user_prompt).",
+      "panelTypes": "graph",
+      "isStacked": false,
+      "fillSpans": true,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-ts-prompts",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.event.name = 'user_prompt'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "prompts",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "list-prompts",
+      "title": "User Prompts (latest)",
+      "description": "Teks prompt user terbaru beserta user.email (redaksi PII aktif).",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "user.email"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "prompt"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-list-prompts",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.event.name = 'user_prompt'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 50,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "desc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "list-resp",
+      "title": "Model Responses (latest)",
+      "description": "Isi response API model (api_response_body) terbaru.",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "body"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-list-resp",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.event.name = 'api_response_body'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 50,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "desc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    }
+  ],
+  "variables": {},
+  "version": "v4"
+}

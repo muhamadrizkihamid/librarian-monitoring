@@ -59,7 +59,6 @@ npm run install:hooks      # merge (backup + idempotent)
 echo '{"hook_event_name":"PreToolUse","tool_name":"Bash","tool_input":{"command":"git status"},"session_id":"x"}' | node hooks/trap.mjs
 
 # setelah restart sesi & beberapa aksi:
-node scripts/reconcile.mjs            # L2 hooks vs L2 OTel
 cat data/audit/hooks-*.jsonl          # audit CEF v1
 cat data/siem/hec-received.jsonl      # event yang masuk ke SIEM (mock)
 docker compose ps                     # collector + siem-mock UP
@@ -67,7 +66,8 @@ docker compose ps                     # collector + siem-mock UP
 
 ## 4b. Dashboard (lihat secara visual, live)
 
-Dashboard berjalan sebagai **container** (ikut `docker compose up -d`). Buka **http://localhost:8090** — **live via WebSocket** (push per-event granular + live ticker), **filter per-user/tool/rentang waktu**, dan grafik tren event & biaya. Untuk monitor di terminal: `node scripts/watch.mjs`.
+- **http://localhost:8091** — Activity Trapping Live (satu-satunya dashboard operasional, WebSocket): live event stream, KPI, **Percakapan user → sesi → prompt** + filter user, Top 5 user token & aktivitas CLI. Sumber data: ClickHouse 30 hari → cache **Redis TTL 30 hari** (restart-safe); backup permanen di ClickHouse.
+- **http://localhost:8080** — SigNoz: 4 dashboard analitis dari ClickHouse (Hooks, Telemetry & Cost, Prompt Drill-Down, Activity & Token Audit).
 
 ## 5. Pemakaian harian
 

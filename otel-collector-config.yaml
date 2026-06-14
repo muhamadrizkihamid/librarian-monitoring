@@ -35,6 +35,17 @@ processors:
           - replace_pattern(attributes["tool_input"], "\\b[0-9]{13,19}\\b", "[REDACTED-NUM]") where attributes["tool_input"] != nil
           - replace_pattern(attributes["tool_input"], "[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}", "[REDACTED-EMAIL]") where attributes["tool_input"] != nil
           - replace_pattern(attributes["full_command"], "(\\+62|0)8[0-9]{7,12}", "[REDACTED-PHONE]") where attributes["full_command"] != nil
+          # --- Redaksi KREDENSIAL (password/token/secret/api_key) — simpan nama field, sensor NILAI ---
+          # Pola 1: <keyword>[:=]<nilai>  (mis. "Password : Trapping#2026", "token=abc", "\"api_key\":\"xyz\"")
+          - replace_pattern(attributes["prompt"], "(?i)(password|passwd|pwd|secret|token|api[-_]?key|access[-_]?key|client[-_]?secret|private[-_]?key)[\"'\\s]*[:=][\"'\\s]*([^\\s\"',}]+)", "$${1}=[REDACTED-SECRET]") where attributes["prompt"] != nil
+          - replace_pattern(attributes["body"], "(?i)(password|passwd|pwd|secret|token|api[-_]?key|access[-_]?key|client[-_]?secret|private[-_]?key)[\"'\\s]*[:=][\"'\\s]*([^\\s\"',}]+)", "$${1}=[REDACTED-SECRET]") where attributes["body"] != nil
+          - replace_pattern(attributes["command"], "(?i)(password|passwd|pwd|secret|token|api[-_]?key|access[-_]?key|client[-_]?secret|private[-_]?key)[\"'\\s]*[:=][\"'\\s]*([^\\s\"',}]+)", "$${1}=[REDACTED-SECRET]") where attributes["command"] != nil
+          - replace_pattern(attributes["tool_input"], "(?i)(password|passwd|pwd|secret|token|api[-_]?key|access[-_]?key|client[-_]?secret|private[-_]?key)[\"'\\s]*[:=][\"'\\s]*([^\\s\"',}]+)", "$${1}=[REDACTED-SECRET]") where attributes["tool_input"] != nil
+          - replace_pattern(attributes["full_command"], "(?i)(password|passwd|pwd|secret|token|api[-_]?key|access[-_]?key|client[-_]?secret|private[-_]?key)[\"'\\s]*[:=][\"'\\s]*([^\\s\"',}]+)", "$${1}=[REDACTED-SECRET]") where attributes["full_command"] != nil
+          # Pola 2: Bearer <token>  (Authorization header)
+          - replace_pattern(attributes["prompt"], "(?i)bearer[\"'\\s]+([A-Za-z0-9._\\-]{8,})", "Bearer [REDACTED-SECRET]") where attributes["prompt"] != nil
+          - replace_pattern(attributes["body"], "(?i)bearer[\"'\\s]+([A-Za-z0-9._\\-]{8,})", "Bearer [REDACTED-SECRET]") where attributes["body"] != nil
+          - replace_pattern(attributes["tool_input"], "(?i)bearer[\"'\\s]+([A-Za-z0-9._\\-]{8,})", "Bearer [REDACTED-SECRET]") where attributes["tool_input"] != nil
 
 exporters:
   # Audit store (simulasi WORM lokal): satu file JSONL per signal.
@@ -44,11 +55,11 @@ exporters:
     path: /data/otel/logs.jsonl
   debug:
     verbosity: basic
-  # SIEM (Splunk HEC). Untuk produksi: ganti endpoint+token ke Splunk korporat,
-  # gunakan https + tls verify, dan simpan token via env (mis. ${env:SPLUNK_HEC_TOKEN}).
-  splunk_hec/siem:
-    token: "test-hec-token-0000"
-    endpoint: "http://siem-mock:8088/services/collector"
+  # Live dashboard (PUSH). Cabang real-time ke service trapping-live (HEC receiver + WebSocket).
+  # Endpoint tak terjangkau TIDAK mematikan collector (retry/drop) — cabang ClickHouse tetap aman.
+  splunk_hec/live:
+    token: "live-token-0000"
+    endpoint: "http://trapping-live:8091/services/collector"
     source: "claude-code"
     sourcetype: "otel:claude_code"
     index: "main"
@@ -70,8 +81,8 @@ service:
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [file/metrics, debug, splunk_hec/siem, otlp/signoz]
+      exporters: [file/metrics, debug, splunk_hec/live, otlp/signoz]
     logs:
       receivers: [otlp]
       processors: [transform/pii, batch]   # redaksi PII sebelum ekspor
-      exporters: [file/logs, debug, splunk_hec/siem, otlp/signoz]
+      exporters: [file/logs, debug, splunk_hec/live, otlp/signoz]

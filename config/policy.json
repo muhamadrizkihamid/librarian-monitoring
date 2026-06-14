@@ -1,7 +1,7 @@
 {
-  "version": "2026-06-14.1",
+  "version": "2026-06-14.2",
   "fail_mode": "open",
-  "_doc": "Aturan enforcement PreToolUse. action: deny (blokir) | flag (izinkan + tandai). Rule pertama yang cocok menang; taruh deny dulu. field: command|path|any. match: contains[] (substring) atau regex (string, case-insensitive). tool: pipe-separated; 'mcp' cocok utk semua tool mcp__*, '*' utk semua.",
+  "_doc": "rules = enforcement PreToolUse (aksi). prompt_rules = enforcement UserPromptSubmit (teks prompt). action: deny (blokir) | flag (izinkan + tandai). Rule pertama yang cocok menang; taruh deny dulu. field (rules): command|path|any. match: contains[] (substring) atau regex (case-insensitive). tool: pipe-separated; 'mcp' utk semua mcp__*, '*' utk semua.",
   "rules": [
     {
       "id": "bash-rm-recursive-force",
@@ -42,6 +42,39 @@
       "regex": "(\\.credentials\\.json|id_rsa|(^|[/\\\\])\\.env\\b|\\.pem\\b|secrets?\\.ya?ml)",
       "action": "flag",
       "reason": "Akses kredensial/secret ditandai untuk audit."
+    }
+  ],
+  "prompt_rules": [
+    {
+      "id": "prompt-destroy-db",
+      "match": "regex",
+      "regex": "\\b(drop|truncate)\\s+(database|table)\\b|\\bdelete\\s+from\\b[\\s\\S]*\\bwhere\\b\\s+1\\s*=\\s*1",
+      "action": "deny",
+      "reason": "Prompt memerintahkan penghapusan/penghancuran basis data."
+    },
+    {
+      "id": "prompt-disable-trapping",
+      "regex": "(matikan|non-?aktifkan|disable|bypass|lewati|akali).{0,30}(trapping|monitoring|audit|hook|policy|managed.?settings|enforcement)",
+      "action": "deny",
+      "reason": "Prompt meminta menonaktifkan/melewati trapping atau audit."
+    },
+    {
+      "id": "prompt-exfil-customer",
+      "regex": "(kirim|unggah|upload|ekspor|export|bocorkan|leak|salin\\s+keluar).{0,40}(data\\s+nasabah|nomor\\s+rekening|nomor\\s+kartu|customer\\s+data|cardholder|mutasi\\s+rekening)",
+      "action": "deny",
+      "reason": "Prompt mengindikasikan eksfiltrasi data nasabah ke luar."
+    },
+    {
+      "id": "prompt-mentions-credential",
+      "regex": "(password|kata\\s+sandi|kredensial|credential|api[\\s_-]?key|secret\\s+key|private\\s+key|token\\s+akses)",
+      "action": "flag",
+      "reason": "Prompt menyebut kredensial — ditandai untuk audit."
+    },
+    {
+      "id": "prompt-mentions-customer-pii",
+      "regex": "(data\\s+nasabah|nomor\\s+rekening|\\bnik\\b|nomor\\s+ktp|nomor\\s+kartu\\s+kredit|cvv|pin\\s+atm)",
+      "action": "flag",
+      "reason": "Prompt menyebut data sensitif nasabah — ditandai untuk audit."
     }
   ]
 }

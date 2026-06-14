@@ -1,0 +1,893 @@
+{
+  "title": "Activity Trapping — Claude Code (L2 Hooks)",
+  "description": "Pemantauan aktivitas Claude Code yang ditangkap lewat managed-settings hooks (capture_layer=hooks) → OTLP → SigNoz. Sumber: service.name=claude-code-hook. Bagian dari Activity Trapping Service (ML LAB / Bank Mega).",
+  "tags": [
+    "claude-code",
+    "trapping",
+    "security",
+    "managed-settings",
+    "L2-hooks"
+  ],
+  "layout": [
+    {
+      "i": "kpi-total",
+      "x": 0,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "kpi-sessions",
+      "x": 3,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "kpi-users",
+      "x": 6,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "kpi-blocked",
+      "x": 9,
+      "y": 0,
+      "w": 3,
+      "h": 2
+    },
+    {
+      "i": "ts-eventkind",
+      "x": 0,
+      "y": 2,
+      "w": 8,
+      "h": 4
+    },
+    {
+      "i": "bar-tools",
+      "x": 8,
+      "y": 2,
+      "w": 4,
+      "h": 4
+    },
+    {
+      "i": "ts-decision",
+      "x": 0,
+      "y": 6,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "tbl-tools",
+      "x": 6,
+      "y": 6,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "ts-user",
+      "x": 0,
+      "y": 10,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "tbl-cmd",
+      "x": 6,
+      "y": 10,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "list-events",
+      "x": 0,
+      "y": 14,
+      "w": 12,
+      "h": 5
+    }
+  ],
+  "widgets": [
+    {
+      "id": "kpi-total",
+      "title": "Total Hook Events",
+      "description": "Jumlah event hook (managed-settings) pada rentang waktu terpilih.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-total",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-sessions",
+      "title": "Active Sessions",
+      "description": "Sesi Claude Code unik (session.id).",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-sessions",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count_distinct(session.id)"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "max"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-users",
+      "title": "Active Users",
+      "description": "User unik (user.id) yang aktivitasnya tertangkap.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-users",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count_distinct(user.id)"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "max"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-blocked",
+      "title": "Blocked / Flagged",
+      "description": "Keputusan policy non-allow (block/flag). Saat ini 0 = capture-only.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-blocked",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook' AND decision != 'allow'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "ts-eventkind",
+      "title": "Event Volume by Kind",
+      "description": "Aliran event per jenis (tool_call, tool_result, request, response, session_*).",
+      "panelTypes": "graph",
+      "isStacked": true,
+      "fillSpans": true,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-ts-eventkind",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook'"
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "event_kind",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "{{event_kind}}",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "bar-tools",
+      "title": "Tool Usage",
+      "description": "Distribusi pemakaian tool (Bash, Read, Edit, Write, MCP).",
+      "panelTypes": "bar",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-bar-tools",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook' AND tool_name EXISTS"
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "tool_name",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "{{tool_name}}",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "ts-decision",
+      "title": "Policy Decisions over Time",
+      "description": "Allow vs block vs flag sepanjang waktu (jejak enforcement).",
+      "panelTypes": "graph",
+      "isStacked": true,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-ts-decision",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook'"
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "decision",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "{{decision}}",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "tbl-tools",
+      "title": "Top Tools (table)",
+      "description": "Peringkat tool berdasarkan jumlah pemanggilan.",
+      "panelTypes": "table",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-tbl-tools",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook' AND tool_name EXISTS"
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "tool_name",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [
+                {
+                  "key": {
+                    "name": "count()"
+                  },
+                  "order": "desc"
+                }
+              ],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "ts-user",
+      "title": "Activity by User",
+      "description": "Volume aktivitas per user.id dari waktu ke waktu.",
+      "panelTypes": "graph",
+      "isStacked": true,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-ts-user",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook'"
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "user.id",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "{{user.id}}",
+              "limit": null,
+              "orderBy": [],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "tbl-cmd",
+      "title": "Top Bash Commands",
+      "description": "Perintah Bash yang paling sering dijalankan (atribut command).",
+      "panelTypes": "table",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-tbl-cmd",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [
+                {
+                  "expression": "count()"
+                }
+              ],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook' AND command EXISTS"
+              },
+              "functions": [],
+              "groupBy": [
+                {
+                  "key": "command",
+                  "dataType": "string",
+                  "type": "tag",
+                  "isColumn": false,
+                  "isJSON": false
+                }
+              ],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 20,
+              "orderBy": [
+                {
+                  "key": {
+                    "name": "count()"
+                  },
+                  "order": "desc"
+                }
+              ],
+              "stepInterval": 60,
+              "reduceTo": "sum"
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "list-events",
+      "title": "Live Event Stream",
+      "description": "Aliran mentah event hook terbaru (managed-settings → OTLP → SigNoz).",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "body"
+        },
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-list-events",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "service.name = 'claude-code-hook'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": null,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "desc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    }
+  ],
+  "variables": {},
+  "version": "v4"
+}

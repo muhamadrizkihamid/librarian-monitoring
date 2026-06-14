@@ -8,8 +8,6 @@ services:
     container_name: trapping-otel-collector
     restart: unless-stopped
     command: ["--config=/etc/otelcol-contrib/config.yaml"]
-    depends_on:
-      - siem-mock
     environment:
       # Collector SigNoz dipetakan ke host :4319 (lihat signoz-deploy). Multi-user: ganti ke collector pusat.
       - SIGNOZ_OTLP_ENDPOINT=host.docker.internal:4319
@@ -22,29 +20,43 @@ services:
       - "4317:4317"   # OTLP gRPC
       - "4318:4318"   # OTLP HTTP
 
-  # Dashboard monitoring (live/SSE). Baca data/ read-only, dorong update ke browser real-time.
-  dashboard:
-    image: node:20-alpine
-    container_name: trapping-dashboard
+  # Redis — hot store dashboard live (TTL 30 hari). Backup permanen tetap di ClickHouse.
+  redis:
+    image: redis:7-alpine
+    container_name: trapping-redis
     restart: unless-stopped
-    command: ["node", "/app/server.mjs"]
-    environment:
-      - DATA_DIR=/data
-      - PORT=8090
-    volumes:
-      - ./dashboard/server.mjs:/app/server.mjs:ro
-      - ./data:/data:ro
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "256mb", "--maxmemory-policy", "volatile-ttl"]
     ports:
-      - "8090:8090"
+      - "6379:6379"
 
-  # Mock SIEM (Splunk HEC) untuk uji jalur exporter. Ganti dgn Splunk korporat saat siap.
-  siem-mock:
+  # Live dashboard (SATU-SATUNYA dashboard). POLL ClickHouse (30 hari) -> cache Redis -> WebSocket.
+  # Collector ekspor via splunk_hec/live -> service ini = PEMICU refresh (bukan sumber data).
+  live:
     image: node:20-alpine
-    container_name: trapping-siem-mock
+    container_name: trapping-live
     restart: unless-stopped
     command: ["node", "/app/server.mjs"]
+    depends_on:
+      - redis
+    environment:
+      - PORT=8091
+      - CH_URL=http://signoz-clickhouse:8123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - WINDOW_DAYS=30
+      - REFRESH_MS=5000
+      - TTL_SECONDS=2592000
+      - ACTIVE_MIN=30          # dashboard hanya menampilkan sesi aktif <= N menit (& belum SessionEnd)
     volumes:
-      - ./siem-mock/server.mjs:/app/server.mjs:ro
-      - ./data:/data
+      - ./live/server.mjs:/app/server.mjs:ro
+    networks:
+      - default
+      - signoz
     ports:
-      - "8088:8088"   # Splunk HEC
+      - "8091:8091"
+
+networks:
+  default:
+  signoz:
+    external: true
+    name: signoz-net

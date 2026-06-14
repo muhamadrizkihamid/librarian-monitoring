@@ -10,9 +10,8 @@
     "install:hooks:dry": "node scripts/merge-settings.mjs --dry-run",
     "uninstall:hooks": "node scripts/merge-settings.mjs --uninstall",
     "build:managed": "node scripts/build-managed-settings.mjs",
-    "deploy:managed": "node scripts/deploy-managed.mjs",
-    "reconcile": "node scripts/reconcile.mjs",
-    "dashboard": "node dashboard/server.mjs"
+    "build:client": "node scripts/build-client-package.mjs",
+    "deploy:managed": "node scripts/deploy-managed.mjs"
   },
   "engines": {
     "node": ">=18"

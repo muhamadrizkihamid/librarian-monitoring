@@ -1,0 +1,1087 @@
+{
+  "title": "Claude Code — Activity & Token Audit (30 hari)",
+  "description": "Audit aktivitas Claude Code: rekap 30 hari semua user, tabel per-prompt \"header detail\" (total token + rincian input/output/cacheCreate/cacheRead + biaya), dan drill-down per prompt (linimasa native, tool actions, response, serta hook/command per sesi). Token/biaya bersumber dari LOGS api_request (ber-prompt.id), bukan metrics. SET TIME-PICKER KE \"Last 30 days\". Bagian Activity Trapping Service (ML LAB / Bank Mega).",
+  "tags": [
+    "claude-code",
+    "audit",
+    "token",
+    "cost",
+    "drill-down",
+    "30d"
+  ],
+  "layout": [
+    {
+      "i": "kpi-prompts",
+      "x": 0,
+      "y": 0,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "i": "kpi-tokens",
+      "x": 2,
+      "y": 0,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "i": "kpi-cost",
+      "x": 4,
+      "y": 0,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "i": "kpi-users",
+      "x": 6,
+      "y": 0,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "i": "kpi-tools",
+      "x": 8,
+      "y": 0,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "i": "kpi-apireq",
+      "x": 10,
+      "y": 0,
+      "w": 2,
+      "h": 2
+    },
+    {
+      "i": "ts-tokens",
+      "x": 0,
+      "y": 2,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "ts-cost",
+      "x": 6,
+      "y": 2,
+      "w": 6,
+      "h": 4
+    },
+    {
+      "i": "tbl-user",
+      "x": 0,
+      "y": 6,
+      "w": 12,
+      "h": 5
+    },
+    {
+      "i": "tbl-audit",
+      "x": 0,
+      "y": 11,
+      "w": 12,
+      "h": 9
+    },
+    {
+      "i": "dd-picker",
+      "x": 0,
+      "y": 20,
+      "w": 12,
+      "h": 6
+    },
+    {
+      "i": "dd-header",
+      "x": 0,
+      "y": 26,
+      "w": 8,
+      "h": 3
+    },
+    {
+      "i": "dd-kpi-total",
+      "x": 8,
+      "y": 26,
+      "w": 2,
+      "h": 3
+    },
+    {
+      "i": "dd-kpi-cost",
+      "x": 10,
+      "y": 26,
+      "w": 2,
+      "h": 3
+    },
+    {
+      "i": "dd-timeline",
+      "x": 0,
+      "y": 29,
+      "w": 12,
+      "h": 8
+    },
+    {
+      "i": "dd-tools",
+      "x": 0,
+      "y": 37,
+      "w": 6,
+      "h": 7
+    },
+    {
+      "i": "dd-resp",
+      "x": 6,
+      "y": 37,
+      "w": 6,
+      "h": 7
+    },
+    {
+      "i": "dd-hooks",
+      "x": 0,
+      "y": 44,
+      "w": 12,
+      "h": 7
+    }
+  ],
+  "widgets": [
+    {
+      "id": "kpi-prompts",
+      "title": "Total Prompt",
+      "description": "Jumlah prompt unik (prompt.id) pada rentang waktu.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT count(DISTINCT attributes_string['prompt.id']) AS v FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND attributes_string['prompt.id']!='' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-prompts",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-tokens",
+      "title": "Total Token",
+      "description": "Total token (input+output+cacheCreate+cacheRead) dari event api_request.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT toUInt64(sum(attributes_number['input_tokens']+attributes_number['output_tokens']+attributes_number['cache_creation_tokens']+attributes_number['cache_read_tokens'])) AS v FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-tokens",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-cost",
+      "title": "Total Biaya (USD)",
+      "description": "Akumulasi cost_usd dari event api_request.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT round(sum(attributes_number['cost_usd']),4) AS v FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-cost",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-users",
+      "title": "User Aktif",
+      "description": "Jumlah user.email unik yang ber-aktivitas.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT count(DISTINCT attributes_string['user.email']) AS v FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-users",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-tools",
+      "title": "Tool Calls",
+      "description": "Jumlah hasil tool (event tool_result).",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT count() AS v FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='tool_result' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-tools",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "kpi-apireq",
+      "title": "API Requests",
+      "description": "Jumlah panggilan API model (event api_request).",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT count() AS v FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-kpi-apireq",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "ts-tokens",
+      "title": "Token per Hari",
+      "description": "Total token per hari (WIB).",
+      "panelTypes": "bar",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT toStartOfDay(toTimeZone(fromUnixTimestamp64Nano(timestamp),'Asia/Jakarta')) AS ts, toUInt64(sum(attributes_number['input_tokens']+attributes_number['output_tokens']+attributes_number['cache_creation_tokens']+attributes_number['cache_read_tokens'])) AS total_token FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}} GROUP BY ts ORDER BY ts",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-ts-tokens",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "ts-cost",
+      "title": "Biaya per Hari (USD)",
+      "description": "Total cost_usd per hari (WIB).",
+      "panelTypes": "bar",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT toStartOfDay(toTimeZone(fromUnixTimestamp64Nano(timestamp),'Asia/Jakarta')) AS ts, round(sum(attributes_number['cost_usd']),4) AS cost_usd FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}} GROUP BY ts ORDER BY ts",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-ts-cost",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "tbl-user",
+      "title": "Rekap per User (token & biaya)",
+      "description": "Per user.email: jumlah prompt, rincian token, total token, dan biaya.",
+      "panelTypes": "table",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT attributes_string['user.email'] AS user, count(DISTINCT attributes_string['prompt.id']) AS prompts, toUInt64(sum(attributes_number['input_tokens'])) AS input, toUInt64(sum(attributes_number['output_tokens'])) AS output, toUInt64(sum(attributes_number['cache_creation_tokens'])) AS cache_create, toUInt64(sum(attributes_number['cache_read_tokens'])) AS cache_read, toUInt64(sum(attributes_number['input_tokens']+attributes_number['output_tokens']+attributes_number['cache_creation_tokens']+attributes_number['cache_read_tokens'])) AS total_token, round(sum(attributes_number['cost_usd']),4) AS cost_usd FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}} GROUP BY user ORDER BY total_token DESC",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-tbl-user",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "tbl-audit",
+      "title": "Audit per Prompt — token & biaya (klik prompt_id lalu pakai di drill-down)",
+      "description": "Satu baris per prompt: waktu (WIB), user, model, jumlah api_call, rincian token (input/output/cacheCreate/cacheRead), TOTAL token, biaya, cuplikan teks prompt, dan prompt_id untuk drill-down.",
+      "panelTypes": "table",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "\nSELECT\n  formatDateTime(toTimeZone(fromUnixTimestamp64Nano(r.last_ts),'Asia/Jakarta'),'%Y-%m-%d %H:%i') AS waktu_wib,\n  r.user AS user, r.model AS model, r.api_calls AS api_calls,\n  r.input AS input, r.output AS output, r.cache_create AS cache_create, r.cache_read AS cache_read,\n  (r.input + r.output + r.cache_create + r.cache_read) AS total_token,\n  r.cost_usd AS cost_usd,\n  substring(p.prompt, 1, 140) AS prompt,\n  r.prompt_id AS prompt_id\nFROM (\n  SELECT attributes_string['prompt.id'] AS prompt_id, max(timestamp) AS last_ts,\n    any(attributes_string['user.email']) AS user, any(attributes_string['model']) AS model, count() AS api_calls,\n    toUInt64(sum(attributes_number['input_tokens'])) AS input,\n    toUInt64(sum(attributes_number['output_tokens'])) AS output,\n    toUInt64(sum(attributes_number['cache_creation_tokens'])) AS cache_create,\n    toUInt64(sum(attributes_number['cache_read_tokens'])) AS cache_read,\n    round(sum(attributes_number['cost_usd']),4) AS cost_usd\n  FROM signoz_logs.distributed_logs_v2\n  WHERE attributes_string['event.name']='api_request' AND attributes_string['prompt.id']!='' AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}\n  GROUP BY prompt_id\n) r\nLEFT JOIN (\n  SELECT attributes_string['prompt.id'] AS prompt_id, argMax(attributes_string['prompt'], timestamp) AS prompt\n  FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='user_prompt' GROUP BY prompt_id\n) p ON r.prompt_id = p.prompt_id\nORDER BY r.last_ts DESC\nLIMIT 300",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-tbl-audit",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "dd-picker",
+      "title": "① Pilih Prompt — daftar prompt terbaru (cocokkan prompt.id ke dropdown atas)",
+      "description": "Daftar user_prompt terbaru beserta prompt.id. Salin prompt.id ke variabel \"prompt_id\" di atas untuk drill-down.",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "user.email"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "prompt"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "prompt.id"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-dd-picker",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.event.name = 'user_prompt'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 50,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "desc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "dd-header",
+      "title": "② Header Detail Token — prompt terpilih",
+      "description": "Rincian token untuk prompt terpilih: input, output, cacheCreate, cacheRead, TOTAL, biaya, jumlah api_call, model.",
+      "panelTypes": "table",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT any(attributes_string['user.email']) AS user, any(attributes_string['model']) AS model, count() AS api_calls, toUInt64(sum(attributes_number['input_tokens'])) AS input, toUInt64(sum(attributes_number['output_tokens'])) AS output, toUInt64(sum(attributes_number['cache_creation_tokens'])) AS cache_create, toUInt64(sum(attributes_number['cache_read_tokens'])) AS cache_read, toUInt64(sum(attributes_number['input_tokens']+attributes_number['output_tokens']+attributes_number['cache_creation_tokens']+attributes_number['cache_read_tokens'])) AS total_token, round(sum(attributes_number['cost_usd']),4) AS cost_usd FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND attributes_string['prompt.id']={{.prompt_id}} AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-dd-header",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "dd-kpi-total",
+      "title": "Total Token (prompt terpilih)",
+      "description": "Total token prompt terpilih.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT toUInt64(sum(attributes_number['input_tokens']+attributes_number['output_tokens']+attributes_number['cache_creation_tokens']+attributes_number['cache_read_tokens'])) AS v FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND attributes_string['prompt.id']={{.prompt_id}} AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-dd-kpi-total",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "dd-kpi-cost",
+      "title": "Biaya (prompt terpilih)",
+      "description": "Biaya USD prompt terpilih.",
+      "panelTypes": "value",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "SELECT round(sum(attributes_number['cost_usd']),4) AS v FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='api_request' AND attributes_string['prompt.id']={{.prompt_id}} AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-dd-kpi-cost",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "dd-timeline",
+      "title": "③ Linimasa — semua aksi prompt terpilih (urut waktu)",
+      "description": "Seluruh event native (request, response, tool_decision, tool_result) untuk prompt terpilih, kronologis.",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "event.name"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "tool_name"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "decision"
+        },
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "body"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-dd-timeline",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 300,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "asc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "dd-tools",
+      "title": "④ Tool Actions (decision + result)",
+      "description": "Aksi tool untuk prompt terpilih: nama tool, keputusan, input/hasil.",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "event.name"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "tool_name"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "decision"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "tool_input"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-dd-tools",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id AND tool_name EXISTS"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 150,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "asc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "dd-resp",
+      "title": "⑤ Model Responses (isi jawaban Claude)",
+      "description": "Isi response API model (api_response_body) untuk prompt terpilih.",
+      "panelTypes": "list",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": [
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "timestamp"
+        },
+        {
+          "dataType": "string",
+          "type": "tag",
+          "name": "model"
+        },
+        {
+          "dataType": "string",
+          "type": "",
+          "name": "body"
+        }
+      ],
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "builder",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-dd-resp",
+        "builder": {
+          "queryData": [
+            {
+              "aggregations": [],
+              "dataSource": "logs",
+              "queryName": "A",
+              "expression": "A",
+              "disabled": false,
+              "filter": {
+                "expression": "attribute.prompt.id = $prompt_id AND attribute.event.name = 'api_response_body'"
+              },
+              "functions": [],
+              "groupBy": [],
+              "having": {
+                "expression": ""
+              },
+              "legend": "",
+              "limit": 50,
+              "orderBy": [
+                {
+                  "columnName": "timestamp",
+                  "order": "asc"
+                }
+              ],
+              "stepInterval": 60
+            }
+          ],
+          "queryFormulas": []
+        }
+      }
+    },
+    {
+      "id": "dd-hooks",
+      "title": "⑥ Hook & Command (layer kebijakan — per sesi prompt terpilih)",
+      "description": "Event hook-layer (PreToolUse/PostToolUse/UserPromptSubmit dll) untuk SESI yang memuat prompt terpilih. Hook tidak ber-prompt.id, dipetakan via session.id. Menampilkan keputusan kebijakan, command, dan tool_input mentah.",
+      "panelTypes": "table",
+      "isStacked": false,
+      "fillSpans": false,
+      "opacity": "1",
+      "nullZeroValues": "zero",
+      "timePreferance": "GLOBAL_TIME",
+      "softMax": null,
+      "softMin": null,
+      "selectedLogFields": null,
+      "selectedTracesFields": null,
+      "yAxisUnit": "none",
+      "thresholds": [],
+      "query": {
+        "queryType": "clickhouse_sql",
+        "promql": [
+          {
+            "name": "A",
+            "query": "",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "clickhouse_sql": [
+          {
+            "name": "A",
+            "query": "\nSELECT\n  formatDateTime(toTimeZone(fromUnixTimestamp64Nano(timestamp),'Asia/Jakarta'),'%Y-%m-%d %H:%i:%S') AS waktu_wib,\n  attributes_string['event_kind'] AS hook, attributes_string['tool_name'] AS tool,\n  attributes_string['decision'] AS decision, attributes_string['policy_rule_id'] AS rule,\n  substring(attributes_string['command'], 1, 160) AS command,\n  substring(attributes_string['tool_input'], 1, 200) AS tool_input\nFROM signoz_logs.distributed_logs_v2\nWHERE resources_string['service.name']='claude-code-hook'\n  AND attributes_string['session.id'] IN (\n    SELECT attributes_string['session.id'] FROM signoz_logs.distributed_logs_v2\n    WHERE attributes_string['prompt.id']={{.prompt_id}} AND attributes_string['session.id']!='' )\n  AND timestamp BETWEEN {{.start_timestamp_nano}} AND {{.end_timestamp_nano}}\nORDER BY timestamp ASC LIMIT 300",
+            "legend": "",
+            "disabled": false
+          }
+        ],
+        "id": "qid-dd-hooks",
+        "builder": {
+          "queryData": [],
+          "queryFormulas": []
+        }
+      }
+    }
+  ],
+  "variables": {
+    "var-prompt-id": {
+      "id": "var-prompt-id",
+      "name": "prompt_id",
+      "description": "Pilih prompt.id untuk drill-down (panel ②–⑥). Cocokkan dengan tabel audit / picker ①.",
+      "type": "QUERY",
+      "queryValue": "SELECT attributes_string['prompt.id'] AS prompt_id FROM signoz_logs.distributed_logs_v2 WHERE attributes_string['event.name']='user_prompt' AND attributes_string['prompt.id']!='' GROUP BY prompt_id ORDER BY max(timestamp) DESC LIMIT 100",
+      "customValue": "",
+      "textboxValue": "",
+      "multiSelect": false,
+      "showALLOption": false,
+      "sort": "DISABLED",
+      "order": 0,
+      "modificationUUID": "var-prompt-id",
+      "selectedValue": ""
+    }
+  },
+  "version": "v4"
+}
