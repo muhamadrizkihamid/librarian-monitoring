@@ -1,0 +1,546 @@
+<mxfile host="65bd71144e" pages="4">
+    <diagram id="Jb2lg8GpfRIHoUzdyHh-" name="HLD - AI Centric">
+        <mxGraphModel dx="1801" dy="301" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="1000" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="Fh_OygjHgF-Un-gqDB7A-1" value="PLATFORM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="130" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Fh_OygjHgF-Un-gqDB7A-2" value="SERVICES" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="300" y="130" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Fh_OygjHgF-Un-gqDB7A-3" value="KNOWLEDGE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="510" y="130" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Fh_OygjHgF-Un-gqDB7A-4" value="MEGA CHATBOT" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="110" y="180" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="Fh_OygjHgF-Un-gqDB7A-5" value="CLAUDE CODE" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="110" y="220" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="PnhaP65dW47mV68li-ZR-1" value="LLM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="720" y="130" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="PnhaP65dW47mV68li-ZR-2" value="GATEWAY" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="180" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="78fQnQwRuyidN1LeQjTL-1" value="AUDIT TRAIL" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="220" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="78fQnQwRuyidN1LeQjTL-2" value="MONITORING" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="260" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="78fQnQwRuyidN1LeQjTL-3" value="GOVERNANCE" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="300" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="78fQnQwRuyidN1LeQjTL-4" value="NON SENSITIVE DATA" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="535" y="180" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="78fQnQwRuyidN1LeQjTL-5" value="SENSITIVE DATA" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="535" y="220" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="78fQnQwRuyidN1LeQjTL-6" value="EXTERNAL LLM" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="180" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="78fQnQwRuyidN1LeQjTL-7" value="SaaS LLM" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="220" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B_0rZ_EIY6T3NYGLcc36-1" value="ML LAB" style="rounded=1;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="110" y="260" width="140" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="2mTaGMel1DuLV2RweIPT-1" value="HIGH LEVEL DESIGN&amp;nbsp; AI CENTRIC - BANK MEGA" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=1;fontSize=21;shadow=1;" parent="1" vertex="1">
+                    <mxGeometry x="-40" y="60" width="1080" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="bdXHAlftkpxQKpzyiOXa-1" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="290" y="360" as="sourcePoint"/>
+                        <mxPoint x="290" y="120" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="bdXHAlftkpxQKpzyiOXa-3" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="500" y="360" as="sourcePoint"/>
+                        <mxPoint x="500" y="120" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="bdXHAlftkpxQKpzyiOXa-4" value="" style="endArrow=none;html=1;rounded=0;" parent="1" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="710" y="360" as="sourcePoint"/>
+                        <mxPoint x="710" y="120" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram name="LDD - AI Centric" id="final-arch-001">
+        <mxGraphModel dx="2689" dy="860" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1500" pageHeight="1500" background="none" math="0" shadow="1">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="idid" value="Lapisan Identitas:&amp;nbsp; LDAP API (Chatbot) - LDAP SAML (Claude Code)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;fontStyle=1;verticalAlign=middle;shadow=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="110" width="1080" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="p1" value="Platform 1 — Chatbot (Orkestrator)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;verticalAlign=top;fontStyle=1;shadow=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="210" width="520" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="ui" value="Chatbot UI (klien)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="260" width="200" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="gw" value="LLM Gateway&#xa;+ MCP client&#xa;+ redaksi PII / guardrail / virtual key" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#82B366;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="260" width="230" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="p2" value="Platform 2 — Claude Code" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;verticalAlign=top;fontStyle=1;shadow=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="600" y="210" width="520" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="cc" value="CLI / IDE (mesin dev, MDM)&#xa;managed settings · OTel · hooks · spend limit&#xa;(Compliance API jika Enterprise)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#6C8EBF;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="260" width="460" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="mllab" value="ZONA DATA SENSITIF INTERNAL — ML LAB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;dashed=1;dashPattern=6 4;verticalAlign=top;fontStyle=1;shadow=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="460" width="620" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="mcp" value="MCP Server (ML LAB)&#xa;tool gateway + authz per model" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B85450;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="508" width="260" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="reg" value="Model registry / serving (MLOps)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="508" width="270" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="models" value="Model khusus bank: scoring, fraud, dll." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="600" width="260" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="data" value="Data nasabah (tetap internal)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#B85450;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="600" width="270" height="55" as="geometry"/>
+                </mxCell>
+                <mxCell id="egr" value="Egress Proxy / DLP inline&#xa;(hanya konten NON-SENSITIF yang keluar)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="700" y="677" width="360" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="extzone" value="Zona SaaS Eksternal — Large Language Models" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;verticalAlign=top;fontStyle=1;shadow=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="630" y="791" width="500" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="openai" value="OpenAI API&#xa;(LLM GPT — dipakai Chatbot)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="839" width="200" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="claude" value="Anthropic — LLM CLAUDE&#xa;(model Claude, dipakai Claude Code)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="890" y="839" width="210" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="gov" value="Pusat Governance, Audit dan Observability" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;verticalAlign=top;fontStyle=1;shadow=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="970" width="1080" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="siem" value="SIEM&#xa;korelasi + deteksi&#xa;(join: user_id)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="1020" width="230" height="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="dlp" value="DLP + Model Risk&#xa;kebijakan data lintas platform&#xa;tata kelola model bank" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="1020" width="230" height="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="audit" value="Audit Store&#xa;immutable / append-only&#xa;retensi sesuai regulasi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;" parent="1" vertex="1">
+                    <mxGeometry x="590" y="1020" width="230" height="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="bi" value="BI / Cost&#xa;biaya + token per user&#xa;utilisasi model bank" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="1020" width="230" height="95" as="geometry"/>
+                </mxCell>
+                <mxCell id="note" value="ATURAN EMAS: data nasabah dan output model bank TIDAK keluar ke OpenAI/Claude — tetap di sisi internal batas MCP. GPT hanya orkestrator." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontStyle=2;align=left;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="690" width="540" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" parent="1" source="idid" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="580" y="300"/>
+                        </Array>
+                        <mxPoint x="530" y="300" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" parent="1" source="idid" target="cc" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="580" y="300"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" parent="1" source="ui" target="gw" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e4" value="MCP (mTLS, authz per model, parameter referensi)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fontSize=10;strokeColor=#660066;strokeWidth=2;" parent="1" source="gw" target="mcp" edge="1">
+                    <mxGeometry x="-0.0766" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                        <Array as="points">
+                            <mxPoint x="220" y="440"/>
+                            <mxPoint x="-10" y="440"/>
+                            <mxPoint x="-10" y="530"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e5" value="non-sensitif" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fontSize=10;fillColor=#d5e8d4;strokeColor=#82B366;strokeWidth=2;" parent="1" source="gw" target="egr" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="240" y="440"/>
+                            <mxPoint x="750" y="440"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fillColor=#dae8fc;strokeColor=#6C8EBF;strokeWidth=2;" parent="1" source="cc" target="egr" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="780" y="450"/>
+                            <mxPoint x="780" y="450"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;" parent="1" source="egr" target="openai" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1140" y="717"/>
+                            <mxPoint x="1140" y="955"/>
+                            <mxPoint x="760" y="955"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e8" value="Claude Code → LLM Claude" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fontSize=10;strokeColor=#6C8EBF;strokeWidth=2;" parent="1" source="egr" target="claude" edge="1">
+                    <mxGeometry x="0.1356" relative="1" as="geometry">
+                        <mxPoint y="-1" as="offset"/>
+                        <Array as="points">
+                            <mxPoint x="1160" y="702"/>
+                            <mxPoint x="1160" y="880"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" parent="1" source="mcp" target="models" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" parent="1" source="mcp" target="reg" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="e11" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;" parent="1" source="mcp" target="data" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="210" y="580"/>
+                            <mxPoint x="495" y="580"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e14" value="audit invocation model" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=10;strokeColor=#007FFF;" parent="1" source="mcp" target="audit" edge="1">
+                    <mxGeometry x="0.3661" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                        <Array as="points">
+                            <mxPoint x="-10" y="540"/>
+                            <mxPoint x="-10" y="1163"/>
+                            <mxPoint x="705" y="1163"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="-z9TarsbfqcpWI6VYNBv-1" value="LOW LEVEL DESIGN&amp;nbsp; AI CENTRIC - BANK MEGA" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=21;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="40" width="1080" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="g3Oq7WGdpLuO8wa0c01y-4" value="ZONA DATA INTERNAL NON SENSITIF" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;verticalAlign=top;fontStyle=1;glass=0;shadow=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="820" y="470" width="300" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="g3Oq7WGdpLuO8wa0c01y-5" value="E-DOC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="850" y="518" width="100" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="g3Oq7WGdpLuO8wa0c01y-6" value="SCM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFD966;strokeColor=#D6B656;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="980" y="518" width="90" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="g3Oq7WGdpLuO8wa0c01y-10" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;curved=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" parent="1" source="cc" target="g3Oq7WGdpLuO8wa0c01y-6" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="860" y="450"/>
+                            <mxPoint x="1140" y="450"/>
+                            <mxPoint x="1140" y="556"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="g3Oq7WGdpLuO8wa0c01y-7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;curved=0;" parent="1" source="ui" target="g3Oq7WGdpLuO8wa0c01y-5" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="430" y="420"/>
+                            <mxPoint x="800" y="420"/>
+                            <mxPoint x="800" y="556"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ats" value="ACTIVITY TRAPPING SERVICE — Ingest Pipeline (L1–L4 → sink)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E1D5E7;strokeColor=#9673A6;verticalAlign=top;fontStyle=1;shadow=1;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="791" width="560" height="161" as="geometry"/>
+                </mxCell>
+                <mxCell id="ats-queue" value="Ingest Queue&#xa;(durable, at-least-once)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="55" y="826" width="120" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="ats-norm" value="Normalizer&#xa;(CEF v1)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="185" y="826" width="120" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="ats-enrich" value="Enricher&#xa;(user_id, cost, DLP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="826" width="120" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="ats-router" value="Router&#xa;(fan-out)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="445" y="826" width="120" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="ats-recon" value="Reconciler — rekonsiliasi L3 (request L7) vs L1/L2 vs billing vendor (deteksi shadow-usage)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=10;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="74" y="896" width="491" height="38" as="geometry"/>
+                </mxCell>
+                <mxCell id="ats-c1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;" parent="1" source="ats-queue" target="ats-norm" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ats-c2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;" parent="1" source="ats-norm" target="ats-enrich" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ats-c3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;" parent="1" source="ats-enrich" target="ats-router" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ats-egr" value="egress log L7 (L3)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=10;strokeColor=#D79B00;strokeWidth=2;" parent="1" source="egr" target="ats-queue" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="880" y="766"/>
+                            <mxPoint x="73" y="766"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ats-out" value="fan-out: SIEM / Audit / BI" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fontSize=10;strokeColor=#9673A6;strokeWidth=2;" parent="1" source="ats-router" target="gov" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="613" y="848"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ats-recon-in" value="L7 logs" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=9;strokeColor=#B85450;" parent="1" source="egr" target="ats-recon" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="860" y="782"/>
+                            <mxPoint x="620" y="782"/>
+                            <mxPoint x="620" y="915"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ats-recon-alert" value="alert shadow-usage" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=9;strokeColor=#B85450;" parent="1" source="ats-recon" target="siem" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="16" y="915"/>
+                            <mxPoint x="16" y="1074"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e12" value="log/event (L1)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=10;strokeColor=#FF00FF;" parent="1" source="gw" target="ats-queue" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="-58" y="300"/>
+                            <mxPoint x="-58" y="844"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="e13" value="OTel/Compliance (L2/L4)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=10;fillColor=#f8cecc;strokeColor=#b85450;strokeWidth=2;" parent="1" source="cc" target="ats-queue" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="860" y="410"/>
+                            <mxPoint x="-34" y="410"/>
+                            <mxPoint x="-34" y="859"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="trapping-svc-001" name="Trapping Service">
+        <mxGraphModel dx="1780" dy="669" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1250" pageHeight="850" math="0" shadow="1">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="ts-title" value="ACTIVITY TRAPPING SERVICE — Penangkapan Aktivitas Lintas Platform (Bank Mega)" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="20" width="1170" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-h1" value="CAPTURE LAYERS (L1–L4)" style="text;html=1;align=center;fontStyle=1;fontSize=12;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="80" width="270" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-h2" value="INGEST PIPELINE" style="text;html=1;align=center;fontStyle=1;fontSize=12;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="80" width="620" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-h3" value="GOVERNANCE SINKS" style="text;html=1;align=center;fontStyle=1;fontSize=12;fontColor=#666666;" parent="1" vertex="1">
+                    <mxGeometry x="1010" y="80" width="200" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-l1" value="L1 — LLM Gateway (Chatbot)&#xa;INLINE · blocking · in-band" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#D5E8D4;strokeColor=#82B366;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="110" width="270" height="64" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-l2" value="L2 — Claude Code OTel + Hooks&#xa;telemetri klien (managed-settings, MDM)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="190" width="270" height="64" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-l3" value="L3 — Egress Proxy / DLP / CASB&#xa;BACKSTOP jaringan · KEDUA platform&#xa;(api.openai · api.anthropic · claude.ai)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE6CC;strokeColor=#D79B00;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="270" width="270" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-l4" value="L4 — Compliance API (Enterprise)&#xa;out-of-band · reaktif · remediasi/delete" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="356" width="270" height="64" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-q" value="Ingest Queue&#xa;durable&#xa;at-least-once" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="225" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-n" value="Normalizer&#xa;(CEF v1)&#xa;dedup event_id" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="520" y="225" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-e" value="Enricher&#xa;user_id · cost&#xa;DLP class" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="680" y="225" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-r" value="Router&#xa;fan-out" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;fontSize=11;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="840" y="225" width="130" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-siem" value="SIEM&#xa;korelasi + deteksi&#xa;(join: user_id)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="1010" y="100" width="200" height="64" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-audit" value="Audit Store&#xa;WORM / append-only&#xa;hash-chain · retensi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="1010" y="180" width="200" height="64" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-bi" value="BI / Cost&#xa;token + biaya per user&#xa;chargeback" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="1010" y="260" width="200" height="64" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-alert" value="Alerting&#xa;(block/flag, anomali)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D79B00;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="1010" y="340" width="200" height="56" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-recon" value="RECONCILER — anti shadow-usage&#xa;rekonsiliasi: L3 (request L7)  vs  L1/L2 (event count)  vs  billing vendor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8CECC;strokeColor=#B85450;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="470" width="541" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-bill" value="Vendor Billing / Usage API&#xa;(OpenAI · Anthropic)&#xa;sumber kebenaran independen" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=11;dashed=1;" parent="1" vertex="1">
+                    <mxGeometry x="1010" y="470" width="200" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-note" value="KELENGKAPAN (&#39;semua aktivitas&#39;): dijamin oleh L3 (egress backstop — semua trafik vendor wajib lewat) + rekonsiliasi vs billing vendor. Telemetri klien (L2) saja TIDAK cukup. Enforcement (block) hanya di lapisan in-band: L1, L2-hook, L3." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF2CC;strokeColor=#D6B656;fontStyle=2;align=left;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="580" width="1170" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-legend" value="&lt;b&gt;Legenda lapisan:&lt;/b&gt;&lt;br&gt;• &lt;b&gt;L1 Gateway&lt;/b&gt; — proxy wajib Chatbot; real-time, bisa menolak/redaksi sebelum keluar.&lt;br&gt;• &lt;b&gt;L2 OTel/Hooks&lt;/b&gt; — konteks kaya (tool, repo, paths); bergantung managed-settings terkunci.&lt;br&gt;• &lt;b&gt;L3 Egress/DLP/CASB&lt;/b&gt; — backstop jaringan untuk KEDUA platform; juga penangkap in-band konten Claude Code (ANTHROPIC_BASE_URL=proxy.internal). Wajib mencakup web claude.ai.&lt;br&gt;• &lt;b&gt;L4 Compliance API&lt;/b&gt; — tarik/hapus konten sisi vendor; reaktif, retensi vendor terbatas.&lt;br&gt;• &lt;b&gt;Reconciler&lt;/b&gt; — bukti kelengkapan; selisih antar sumber ⇒ alert shadow-usage." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#9673A6;align=left;verticalAlign=top;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="650" width="1170" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-e1" value="event (L1)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fontSize=10;strokeColor=#82B366;strokeWidth=2;" parent="1" source="ts-l1" target="ts-q" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-e2" value="telemetri (L2)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fontSize=10;strokeColor=#6C8EBF;strokeWidth=2;" parent="1" source="ts-l2" target="ts-q" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-e3" value="egress log (L3)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fontSize=10;strokeColor=#D79B00;strokeWidth=2;" parent="1" source="ts-l3" target="ts-q" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-e4" value="pull (L4)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;fontSize=10;strokeColor=#D6B656;strokeWidth=2;" parent="1" source="ts-l4" target="ts-q" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-c1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;strokeWidth=2;" parent="1" source="ts-q" target="ts-n" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-c2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;strokeWidth=2;" parent="1" source="ts-n" target="ts-e" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-c3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;strokeWidth=2;" parent="1" source="ts-e" target="ts-r" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-o1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;strokeWidth=2;" parent="1" source="ts-r" target="ts-siem" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="989" y="265"/>
+                            <mxPoint x="989" y="132"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ts-o2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;strokeWidth=2;" parent="1" source="ts-r" target="ts-audit" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-o3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;strokeWidth=2;" parent="1" source="ts-r" target="ts-bi" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-o4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;strokeColor=#9673A6;strokeWidth=2;" parent="1" source="ts-r" target="ts-alert" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="990" y="265"/>
+                            <mxPoint x="990" y="368"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ts-rin1" value="request L7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=9;strokeColor=#B85450;" parent="1" source="ts-l3" target="ts-recon" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="337" y="305"/>
+                            <mxPoint x="337" y="505"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ts-rin2" value="event count" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=9;strokeColor=#B85450;" parent="1" source="ts-r" target="ts-recon" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="ts-rin3" value="usage/billing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=9;strokeColor=#666666;" parent="1" source="ts-bill" target="ts-recon" edge="1">
+                    <mxGeometry x="0.0092" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="ts-ralert" value="alert shadow-usage" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;dashed=1;fontSize=9;strokeColor=#B85450;strokeWidth=2;" parent="1" source="ts-recon" target="ts-siem" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="679" y="420"/>
+                            <mxPoint x="1233" y="420"/>
+                            <mxPoint x="1233" y="132"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="actual-lld-001" name="Actual LLD">
+        <mxGraphModel dx="1200" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1000" pageHeight="1560" math="0" shadow="0">
+            <root>
+                <mxCell id="al-0"/>
+                <mxCell id="al-1" parent="al-0"/>
+                <mxCell id="al-title" value="Actual LLD &#8212; As-Built MVP (Juni 2026): hanya L2 (Claude Code)" style="text;html=1;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;" vertex="1" parent="al-1">
+                    <mxGeometry x="40" y="20" width="640" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-cli" value="Claude Code CLI&#xa;(managed-settings.json + hooks/trap.mjs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="al-1">
+                    <mxGeometry x="40" y="80" width="220" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-col" value="OTel Collector&#xa;(trapping-otel-collector)&#xa;redaksi PII + secret &#8594; fan-out" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="al-1">
+                    <mxGeometry x="40" y="220" width="220" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-jsonl" value="data/otel/*.jsonl&#xa;(audit lokal, append)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="al-1">
+                    <mxGeometry x="380" y="120" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-ch" value="ClickHouse / SigNoz&#xa;(store permanen / source of truth)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="al-1">
+                    <mxGeometry x="380" y="240" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-live" value="trapping-live :8091&#xa;(dashboard WebSocket)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="al-1">
+                    <mxGeometry x="380" y="380" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-redis" value="Redis :6379&#xa;(hot store, TTL 30 hari)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="al-1">
+                    <mxGeometry x="380" y="500" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-signoz" value="SigNoz UI :8080&#xa;(4 dashboard analitis)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="al-1">
+                    <mxGeometry x="700" y="240" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-browser" value="Browser&#xa;(user &#8594; sesi &#8594; prompt)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="al-1">
+                    <mxGeometry x="700" y="380" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-note" value="TIDAK dibangun di MVP: L1 Gateway (Chatbot), L3 Egress/DLP/CASB, L4 Compliance API, Ingest Queue durable, Normalizer CEF, Reconciler, SIEM, Audit WORM/hash-chain.&#xa;&#8658; Kelengkapan BELUM terbukti (lihat LLD &#167;7 &amp; &#167;11): L2 bisa dimatikan/di-bypass; tanpa L3 + rekonsiliasi billing, klaim 'menangkap semua aktivitas' tidak terbukti." style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=2;" vertex="1" parent="al-1">
+                    <mxGeometry x="40" y="600" width="540" height="120" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-e1" value="OTLP :4317/:4318" style="endArrow=block;html=1;" edge="1" parent="al-1" source="al-cli" target="al-col">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-e2" value="fan-out (file)" style="endArrow=block;html=1;" edge="1" parent="al-1" source="al-col" target="al-jsonl">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-e3" value="fan-out (otlp)" style="endArrow=block;html=1;" edge="1" parent="al-1" source="al-col" target="al-ch">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-e4" value="fan-out (HEC)" style="endArrow=block;html=1;" edge="1" parent="al-1" source="al-col" target="al-live">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-e5" value="poll 30 hari" style="endArrow=block;html=1;dashed=1;" edge="1" parent="al-1" source="al-ch" target="al-live">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-e6" value="cache (TTL 30h)" style="endArrow=block;startArrow=block;html=1;" edge="1" parent="al-1" source="al-live" target="al-redis">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-e7" value="WebSocket" style="endArrow=block;html=1;" edge="1" parent="al-1" source="al-live" target="al-browser">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-e8" value="query" style="endArrow=block;html=1;dashed=1;" edge="1" parent="al-1" source="al-ch" target="al-signoz">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-gloss-title" value="FOOTNOTE &#8212; Glosarium istilah &amp; singkatan (semua tab)" style="text;html=1;align=left;verticalAlign=middle;fontSize=13;fontStyle=1;" vertex="1" parent="al-1">
+                    <mxGeometry x="40" y="760" width="640" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-gloss-l" value="ARSITEKTUR &amp; DOKUMEN&#xa;HLD = High-Level Design (desain ringkas/tingkat tinggi).&#xa;LLD = Low-Level Design (desain rinci/detail).&#xa;source of truth = sumber kebenaran tunggal (data acuan utama).&#xa;&#xa;LLM &amp; VENDOR&#xa;LLM = Large Language Model (model bahasa besar, mis. GPT/Claude).&#xa;GPT = model OpenAI yang dipakai Chatbot.&#xa;Claude / Anthropic = LLM Anthropic yang dipakai Claude Code.&#xa;SaaS = Software as a Service (layanan pihak ketiga via internet).&#xa;API = Application Programming Interface (antarmuka antar program).&#xa;&#xa;CLAUDE CODE (KLIEN)&#xa;CLI = Command Line Interface (antarmuka baris perintah).&#xa;IDE = Integrated Development Environment (editor kode, mis. VS Code).&#xa;MDM = Mobile Device Management (kelola perangkat terpusat; push managed-settings).&#xa;managed-settings = konfigurasi terkunci, tak bisa diubah developer.&#xa;hooks = skrip yang jalan saat event tool (PreToolUse/PostToolUse).&#xa;spend limit = batas biaya per user.&#xa;&#xa;DATA &amp; MODEL INTERNAL&#xa;MCP = Model Context Protocol (gerbang tool ke model/data bank; batas Aturan Emas).&#xa;ML LAB = zona data sensitif internal (model bank + data nasabah).&#xa;MLOps = Machine Learning Operations (kelola siklus hidup model).&#xa;scoring/fraud = model bank (skor risiko kredit / deteksi penipuan).&#xa;E-DOC = dokumen elektronik internal (non-sensitif).&#xa;SCM = Source Code Management (repositori kode, mis. Git).&#xa;Aturan Emas = data nasabah dan output model bank TIDAK keluar ke LLM eksternal.&#xa;&#xa;KEAMANAN &amp; JARINGAN&#xa;PII = Personally Identifiable Information (data pribadi: NIK, kartu, email).&#xa;DLP = Data Loss Prevention (cegah kebocoran data sensitif).&#xa;CASB = Cloud Access Security Broker (kontrol akses layanan cloud/web).&#xa;SIEM = Security Information and Event Management (korelasi dan deteksi keamanan).&#xa;Egress proxy = gerbang keluar; semua trafik vendor wajib lewat sini.&#xa;guardrail = pagar pengaman (moderasi, cek prompt-injection).&#xa;LDAP = Lightweight Directory Access Protocol (direktori user korporat).&#xa;SAML = Security Assertion Markup Language (standar Single Sign-On).&#xa;mTLS = mutual TLS (enkripsi dua-arah dengan verifikasi sertifikat).&#xa;TLS = Transport Layer Security (enkripsi koneksi / HTTPS)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f5f5f5;strokeColor=#999999;" vertex="1" parent="al-1">
+                    <mxGeometry x="40" y="794" width="460" height="740" as="geometry"/>
+                </mxCell>
+                <mxCell id="al-gloss-r" value="TELEMETRI &amp; PIPELINE&#xa;OTel = OpenTelemetry (standar telemetri: log/metrik/trace).&#xa;OTLP = OpenTelemetry Protocol (protokol kirim telemetri; port 4317/4318).&#xa;HEC = HTTP Event Collector (endpoint ala Splunk; memicu trapping-live).&#xa;CEF = Common Event Format (skema event terpadu lintas sumber).&#xa;Ingest Queue = antrian penampung (durable, tahan lonjakan).&#xa;Normalizer = penyeragam event ke satu skema.&#xa;Enricher = pelengkap event (user_id, cost, klasifikasi DLP).&#xa;Router = penyebar event ke banyak tujuan (fan-out).&#xa;Reconciler = rekonsiliasi antar sumber untuk deteksi shadow-usage.&#xa;at-least-once = jaminan event terkirim minimal sekali (boleh dobel, didedup).&#xa;dedup = penghapusan duplikat (via event_id).&#xa;fan-out = satu input disebar ke banyak output.&#xa;&#xa;PENYIMPANAN &amp; DASHBOARD (MVP)&#xa;ClickHouse = database analitik (store permanen / source of truth).&#xa;SigNoz = platform observability (UI dashboard di :8080).&#xa;Redis = penyimpan in-memory cepat (hot store dashboard, TTL 30 hari).&#xa;trapping-live = dashboard live (:8091, WebSocket).&#xa;WebSocket = koneksi dua-arah real-time browser-server.&#xa;TTL = Time To Live (umur data sebelum kedaluwarsa).&#xa;WORM = Write Once Read Many (sekali tulis, tak bisa diubah; untuk audit).&#xa;BI = Business Intelligence (analitik biaya/token, chargeback).&#xa;chargeback = pembebanan biaya ke tim/user pemakai.&#xa;&#xa;LAPISAN &amp; KELENGKAPAN&#xa;L1-L4 = empat lapisan penangkapan (Gateway, OTel/Hooks, Egress, Compliance).&#xa;L7 = Layer 7 OSI (lapisan aplikasi; log per-request, bukan koneksi TCP).&#xa;in-band = di jalur lalu lintas (bisa blokir real-time).&#xa;out-of-band = di luar jalur (reaktif, tidak memblokir).&#xa;backstop = jaring pengaman terakhir (L3 egress).&#xa;shadow-usage = pemakaian LLM tak terpantau (lolos dari telemetri).&#xa;Compliance API = API vendor (Enterprise) untuk tarik/hapus konten.&#xa;user_id = email korporat; kunci join lintas platform.&#xa;HA = High Availability (ketersediaan tinggi, minimal 2 instance).&#xa;UI = User Interface (antarmuka pengguna)." style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacing=8;fontSize=11;fillColor=#f5f5f5;strokeColor=#999999;" vertex="1" parent="al-1">
+                    <mxGeometry x="520" y="794" width="460" height="600" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
